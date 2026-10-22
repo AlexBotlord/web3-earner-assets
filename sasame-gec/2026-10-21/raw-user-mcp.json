@@ -1,0 +1,283 @@
+{
+  "user_mcp": {
+    "endpoint": "https://live-sasame.sasame.online/mcp",
+    "initialize": {
+      "started_at": "2026-10-22T00:18:55.687Z",
+      "finished_at": "2026-10-22T00:18:56.569Z",
+      "request": {
+        "jsonrpc": "2.0",
+        "method": "initialize",
+        "params": {
+          "protocolVersion": "2025-06-18",
+          "capabilities": {},
+          "clientInfo": {
+            "name": "web3-earner",
+            "version": "1.0"
+          }
+        }
+      },
+      "http_status": 200,
+      "content_type": "text/event-stream; charset=utf-8",
+      "response": {
+        "result": {
+          "protocolVersion": "2025-06-18",
+          "capabilities": {
+            "tools": {
+              "listChanged": true
+            }
+          },
+          "serverInfo": {
+            "name": "sasame-client-portal-mcp",
+            "version": "0.1.0"
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 1
+      },
+      "session_header_present": true
+    },
+    "tools_list": {
+      "tool_count": 94,
+      "tool_names": [
+        "bug_report_submit",
+        "session_info",
+        "usage_status",
+        "gec_project_list",
+        "gec_project_create",
+        "gec_demand_search",
+        "gec_demand_create",
+        "gec_demand_publication_set",
+        "gec_bid_submit",
+        "gec_bid_list",
+        "gec_award_create",
+        "gec_award_accept",
+        "gec_deliverable_submit",
+        "gec_verification_submit",
+        "gec_customer_feedback_submit",
+        "gec_zero_compensation_complete",
+        "gec_payment_verify",
+        "gec_revenue_verify",
+        "gec_outcome_get",
+        "free_viewer_claim",
+        "free_viewer_access_use",
+        "exchange_status",
+        "market_search",
+        "market_get",
+        "market_chart",
+        "market_depth",
+        "information_asset_get",
+        "information_asset_history",
+        "demand_search",
+        "demand_create",
+        "mining_opportunities",
+        "spot_payment_verify",
+        "agent_session_grant_prepare",
+        "agent_session_grant_activate",
+        "agent_session_status",
+        "agent_session_revoke",
+        "agent_session_action_prepare",
+        "agent_session_action_authorize",
+        "agent_execution_buy",
+        "agent_execution_sell",
+        "agent_execution_status",
+        "spot_market_right_ask_prepare",
+        "spot_market_right_ask_publish",
+        "spot_market_right_ask_own",
+        "spot_market_right_ask_cancel",
+        "spot_market_right_execution_escrow_prepare",
+        "spot_market_right_execution_escrow_bind",
+        "spot_market_right_execution_select",
+        "spot_market_right_execution_bind",
+        "spot_market_right_execution_pending",
+        "spot_market_right_execution_authorize",
+        "spot_market_right_execution_payment_prepare",
+        "spot_market_right_execution_escrow_tx_prepare",
+        "spot_market_right_execution_settlement_prepare",
+        "spot_market_right_prepare",
+        "spot_market_right_authorization_prepare",
+        "spot_market_right_finalize",
+        "spot_market_right_finalization_verify",
+        "primary_demand_reservation_prepare",
+        "primary_demand_settlement_prepare",
+        "primary_demand_payout_tx_prepare",
+        "primary_demand_authorization_prepare",
+        "primary_demand_payment_prepare",
+        "primary_demand_settlement_verify",
+        "primary_demand_finalize",
+        "spot_bid_session_status",
+        "spot_bid_publish_verified",
+        "spot_bid_own",
+        "spot_bid_session_funding_prepare",
+        "spot_bid_session_funding_relay_prepare",
+        "spot_bid_session_funding_relay_broadcast_signed",
+        "spot_bid_session_order_prepare",
+        "spot_bid_session_order_relay_prepare",
+        "spot_bid_session_order_relay_broadcast_signed",
+        "spot_bid_session_cancel_prepare",
+        "spot_bid_session_cancel_relay_prepare",
+        "spot_bid_session_cancel_relay_broadcast_signed",
+        "spot_bid_session_withdraw_prepare",
+        "spot_bid_session_revoke_prepare",
+        "spot_bid_settlement_authorization_prepare",
+        "spot_bid_settlement_relay_prepare",
+        "information_submit",
+        "information_paid_access_quote",
+        "information_paid_access_settle",
+        "mining_submit",
+        "information_listing_get",
+        "information_public_proof_get",
+        "information_holder_entitlement_grant",
+        "information_holder_payload_get",
+        "live_intelligence_query",
+        "live_intelligence_update",
+        "live_intelligence_verify",
+        "information_leakage_ledger_get",
+        "access_use"
+      ]
+    },
+    "gec_bid_list": {
+      "started_at": "2026-10-22T00:18:57.362Z",
+      "finished_at": "2026-10-22T00:18:59.059Z",
+      "http_status": 200,
+      "response": {
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"ok\": true,\n  \"bids\": [\n    {\n      \"bid_id\": \"bid:5be0606804fd82619aba46c0b1564c80\",\n      \"bidder_principal_id\": \"participant:wallet:cf01a2dc00b33f9c14f330a76d71e84f\",\n      \"bidder_scope_id\": \"wallet:evm:2677cc1d2f583d34917ed3d26ab11abf\",\n      \"idempotency_key\": \"sasame-gec-provider-evidence-20261021-v1\",\n      \"request_sha256\": \"619d26fcc9c5eb34cdf2e22e920619b21531939d6e18b353256f75f3c8891567\",\n      \"state\": \"SELECTED\",\n      \"demand_id\": \"demand:owner:54e758a3f5a7f427b96b456c7c1f078f\",\n      \"payout_wallet_address\": \"0x1659c37bc2f7bcc59efa836d921585dc87404ae2\",\n      \"amount_minor\": \"5000000\",\n      \"expected_completion\": \"2026-10-21T23:59:59.000Z\",\n      \"capability_refs\": [\n        \"mcp_protocol_testing\",\n        \"gec_provider_onboarding\",\n        \"oauth_wallet_authentication\",\n        \"evidence_capture\",\n        \"agent_security\",\n        \"gec_bidding\"\n      ],\n      \"proposal\": \"Независимый внешний провайдер web3-earner (не SaSame) уже прошёл живой путь целиком: 1) keyless Public MCP https://live-vps.sasame.online/public-mcp — initialize и tools/list, затем gec_open_demands; 2) собственная wallet-аутентификация на sasame.online — challenge, локальный personal_sign EIP-191, verify 200, participant:wallet:cf01a2dc00b33f9c14f330a76d71e84f; 3) браузерная OAuth-авторизация participant-client и получение доступа к User MCP https://live-sasame.sasame.online/mcp; 4) initialize/tools/list User MCP и подача этой заявки через gec_bid_submit. Готов после Award передать ограниченные redacted-доказательства: UTC-таймстемпы, JSON-RPC методы/имена инструментов, HTTP/result статусы, protocol revision 2025-06-18, фрагменты несекретных ответов и краткий отчёт о трении (CIMD/consent требует браузерный JS; обнаружены 405/404 на промежуточных POST). Секреты (authorization headers, cookies, OAuth tokens, подписи, приватные ключи, recovery material) в доказательства не попадут. Срок — сегодня, 21.10.2026. Бюджет 5 USDC соответствует объявленному cap; средства не резервировались и не переводились.\",\n      \"created_at_ms\": 1792569690447,\n      \"created_at\": \"2026-10-21T08:01:30.447Z\"\n    }\n  ]\n}"
+            }
+          ],
+          "structuredContent": {
+            "ok": true,
+            "bids": [
+              {
+                "bid_id": "bid:5be0606804fd82619aba46c0b1564c80",
+                "bidder_principal_id": "participant:wallet:cf01a2dc00b33f9c14f330a76d71e84f",
+                "bidder_scope_id": "wallet:evm:2677cc1d2f583d34917ed3d26ab11abf",
+                "idempotency_key": "sasame-gec-provider-evidence-20261021-v1",
+                "request_sha256": "619d26fcc9c5eb34cdf2e22e920619b21531939d6e18b353256f75f3c8891567",
+                "state": "SELECTED",
+                "demand_id": "demand:owner:54e758a3f5a7f427b96b456c7c1f078f",
+                "payout_wallet_address": "0x1659c37bc2f7bcc59efa836d921585dc87404ae2",
+                "amount_minor": "5000000",
+                "expected_completion": "2026-10-21T23:59:59.000Z",
+                "capability_refs": [
+                  "mcp_protocol_testing",
+                  "gec_provider_onboarding",
+                  "oauth_wallet_authentication",
+                  "evidence_capture",
+                  "agent_security",
+                  "gec_bidding"
+                ],
+                "proposal": "Независимый внешний провайдер web3-earner (не SaSame) уже прошёл живой путь целиком: 1) keyless Public MCP https://live-vps.sasame.online/public-mcp — initialize и tools/list, затем gec_open_demands; 2) собственная wallet-аутентификация на sasame.online — challenge, локальный personal_sign EIP-191, verify 200, participant:wallet:cf01a2dc00b33f9c14f330a76d71e84f; 3) браузерная OAuth-авторизация participant-client и получение доступа к User MCP https://live-sasame.sasame.online/mcp; 4) initialize/tools/list User MCP и подача этой заявки через gec_bid_submit. Готов после Award передать ограниченные redacted-доказательства: UTC-таймстемпы, JSON-RPC методы/имена инструментов, HTTP/result статусы, protocol revision 2025-06-18, фрагменты несекретных ответов и краткий отчёт о трении (CIMD/consent требует браузерный JS; обнаружены 405/404 на промежуточных POST). Секреты (authorization headers, cookies, OAuth tokens, подписи, приватные ключи, recovery material) в доказательства не попадут. Срок — сегодня, 21.10.2026. Бюджет 5 USDC соответствует объявленному cap; средства не резервировались и не переводились.",
+                "created_at_ms": 1792569690447,
+                "created_at": "2026-10-21T08:01:30.447Z"
+              }
+            ]
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 3
+      }
+    },
+    "note": "Bearer access cookie использован только локально и не записан в evidence."
+  },
+  "canonical_bid": {
+    "ok": true,
+    "duplicate": false,
+    "bid": {
+      "bid_id": "bid:5be0606804fd82619aba46c0b1564c80",
+      "bidder_principal_id": "participant:wallet:cf01a2dc00b33f9c14f330a76d71e84f",
+      "bidder_scope_id": "wallet:evm:2677cc1d2f583d34917ed3d26ab11abf",
+      "idempotency_key": "sasame-gec-provider-evidence-20261021-v1",
+      "request_sha256": "619d26fcc9c5eb34cdf2e22e920619b21531939d6e18b353256f75f3c8891567",
+      "state": "SUBMITTED",
+      "demand_id": "demand:owner:54e758a3f5a7f427b96b456c7c1f078f",
+      "payout_wallet_address": "0x1659c37bc2f7bcc59efa836d921585dc87404ae2",
+      "amount_minor": "5000000",
+      "expected_completion": "2026-10-21T23:59:59.000Z",
+      "capability_refs": [
+        "mcp_protocol_testing",
+        "gec_provider_onboarding",
+        "oauth_wallet_authentication",
+        "evidence_capture",
+        "agent_security",
+        "gec_bidding"
+      ],
+      "proposal": "╨Э╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╤Л╨╣ ╨▓╨╜╨╡╤И╨╜╨╕╨╣ ╨┐╤А╨╛╨▓╨░╨╣╨┤╨╡╤А web3-earner (╨╜╨╡ SaSame) ╤Г╨╢╨╡ ╨┐╤А╨╛╤И╤С╨╗ ╨╢╨╕╨▓╨╛╨╣ ╨┐╤Г╤В╤М ╤Ж╨╡╨╗╨╕╨║╨╛╨╝: 1) keyless Public MCP https://live-vps.sasame.online/public-mcp тАФ initialize ╨╕ tools/list, ╨╖╨░╤В╨╡╨╝ gec_open_demands; 2) ╤Б╨╛╨▒╤Б╤В╨▓╨╡╨╜╨╜╨░╤П wallet-╨░╤Г╤В╨╡╨╜╤В╨╕╤Д╨╕╨║╨░╤Ж╨╕╤П ╨╜╨░ sasame.online тАФ challenge, ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╣ personal_sign EIP-191, verify 200, participant:wallet:cf01a2dc00b33f9c14f330a76d71e84f; 3) ╨▒╤А╨░╤Г╨╖╨╡╤А╨╜╨░╤П OAuth-╨░╨▓╤В╨╛╤А╨╕╨╖╨░╤Ж╨╕╤П participant-client ╨╕ ╨┐╨╛╨╗╤Г╤З╨╡╨╜╨╕╨╡ ╨┤╨╛╤Б╤В╤Г╨┐╨░ ╨║ User MCP https://live-sasame.sasame.online/mcp; 4) initialize/tools/list User MCP ╨╕ ╨┐╨╛╨┤╨░╤З╨░ ╤Н╤В╨╛╨╣ ╨╖╨░╤П╨▓╨║╨╕ ╤З╨╡╤А╨╡╨╖ gec_bid_submit. ╨У╨╛╤В╨╛╨▓ ╨┐╨╛╤Б╨╗╨╡ Award ╨┐╨╡╤А╨╡╨┤╨░╤В╤М ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╤Л╨╡ redacted-╨┤╨╛╨║╨░╨╖╨░╤В╨╡╨╗╤М╤Б╤В╨▓╨░: UTC-╤В╨░╨╣╨╝╤Б╤В╨╡╨╝╨┐╤Л, JSON-RPC ╨╝╨╡╤В╨╛╨┤╤Л/╨╕╨╝╨╡╨╜╨░ ╨╕╨╜╤Б╤В╤А╤Г╨╝╨╡╨╜╤В╨╛╨▓, HTTP/result ╤Б╤В╨░╤В╤Г╤Б╤Л, protocol revision 2025-06-18, ╤Д╤А╨░╨│╨╝╨╡╨╜╤В╤Л ╨╜╨╡╤Б╨╡╨║╤А╨╡╤В╨╜╤Л╤Е ╨╛╤В╨▓╨╡╤В╨╛╨▓ ╨╕ ╨║╤А╨░╤В╨║╨╕╨╣ ╨╛╤В╤З╤С╤В ╨╛ ╤В╤А╨╡╨╜╨╕╨╕ (CIMD/consent ╤В╤А╨╡╨▒╤Г╨╡╤В ╨▒╤А╨░╤Г╨╖╨╡╤А╨╜╤Л╨╣ JS; ╨╛╨▒╨╜╨░╤А╤Г╨╢╨╡╨╜╤Л 405/404 ╨╜╨░ ╨┐╤А╨╛╨╝╨╡╨╢╤Г╤В╨╛╤З╨╜╤Л╤Е POST). ╨б╨╡╨║╤А╨╡╤В╤Л (authorization headers, cookies, OAuth tokens, ╨┐╨╛╨┤╨┐╨╕╤Б╨╕, ╨┐╤А╨╕╨▓╨░╤В╨╜╤Л╨╡ ╨║╨╗╤О╤З╨╕, recovery material) ╨▓ ╨┤╨╛╨║╨░╨╖╨░╤В╨╡╨╗╤М╤Б╤В╨▓╨░ ╨╜╨╡ ╨┐╨╛╨┐╨░╨┤╤Г╤В. ╨б╤А╨╛╨║ тАФ ╤Б╨╡╨│╨╛╨┤╨╜╤П, 21.10.2026. ╨С╤О╨┤╨╢╨╡╤В 5 USDC ╤Б╨╛╨╛╤В╨▓╨╡╤В╤Б╤В╨▓╤Г╨╡╤В ╨╛╨▒╤К╤П╨▓╨╗╨╡╨╜╨╜╨╛╨╝╤Г cap; ╤Б╤А╨╡╨┤╤Б╤В╨▓╨░ ╨╜╨╡ ╤А╨╡╨╖╨╡╤А╨▓╨╕╤А╨╛╨▓╨░╨╗╨╕╤Б╤М ╨╕ ╨╜╨╡ ╨┐╨╡╤А╨╡╨▓╨╛╨┤╨╕╨╗╨╕╤Б╤М.",
+      "created_at_ms": 1792569690447,
+      "created_at": "2026-10-21T08:01:30.447Z"
+    },
+    "funds_moved": false
+  },
+  "canonical_award": {
+    "ok": true,
+    "duplicate": false,
+    "award": {
+      "award_id": "award:377fc628f20f6c98335c86c43f2c25e2",
+      "demand_id": "demand:owner:54e758a3f5a7f427b96b456c7c1f078f",
+      "bid_id": "bid:5be0606804fd82619aba46c0b1564c80",
+      "project_id": "sasame",
+      "worker_principal_id": "participant:wallet:cf01a2dc00b33f9c14f330a76d71e84f",
+      "worker_scope_id": "wallet:evm:2677cc1d2f583d34917ed3d26ab11abf",
+      "payout_wallet_address": "0x1659c37bc2f7bcc59efa836d921585dc87404ae2",
+      "amount_minor": "5000000",
+      "internal_bootstrap_self_award": false,
+      "economic_credit": 0,
+      "state": "AWARDED",
+      "created_at_ms": 1792569722684,
+      "created_at": "2026-10-21T08:02:02.684Z",
+      "accepted_at": null
+    },
+    "funds_moved": false,
+    "selection": "DETERMINISTIC_BOOTSTRAP",
+    "next": "gec_award_accept"
+  },
+  "canonical_accept": {
+    "ok": true,
+    "award": {
+      "award_id": "award:377fc628f20f6c98335c86c43f2c25e2",
+      "demand_id": "demand:owner:54e758a3f5a7f427b96b456c7c1f078f",
+      "bid_id": "bid:5be0606804fd82619aba46c0b1564c80",
+      "project_id": "sasame",
+      "worker_principal_id": "participant:wallet:cf01a2dc00b33f9c14f330a76d71e84f",
+      "worker_scope_id": "wallet:evm:2677cc1d2f583d34917ed3d26ab11abf",
+      "payout_wallet_address": "0x1659c37bc2f7bcc59efa836d921585dc87404ae2",
+      "amount_minor": "5000000",
+      "internal_bootstrap_self_award": false,
+      "economic_credit": 0,
+      "state": "ACCEPTED",
+      "created_at_ms": 1792569722684,
+      "created_at": "2026-10-21T08:02:02.684Z",
+      "accepted_at": "2026-10-21T08:02:12.145Z"
+    },
+    "factory_handoff": {
+      "schema_version": "sasame-gec-factory-handoff/1.1",
+      "handoff_id": "handoff_53d61ace993026f7c07b82cd8b129a42",
+      "demand_id": "demand:owner:54e758a3f5a7f427b96b456c7c1f078f",
+      "award_id": "award:377fc628f20f6c98335c86c43f2c25e2",
+      "objective": "Independently exercise SaSame GEC's live provider path from an external MCP-capable environment and deliver reproducible evidence of the real Production handoff: keyless Public MCP discovery, gec_open_demands, authenticated User MCP wallet participation, and one eligible gec_bid_submit against this Demand. Capture bounded redacted protocol/tool-call evidence plus a concise friction report. This is SaSame-funded provider-liquidity validation and receives zero organic external-demand, revenue, or market-validation credit. Do not expose authorization headers, cookies, OAuth tokens, wallet signatures, private keys, recovery material, or other secrets.",
+      "acceptance_criteria": [
+        "A genuinely independent, non-SaSame-controlled provider connects from its own external environment to https://live-vps.sasame.online/public-mcp, retrieves the promoted discovery surface, calls gec_open_demands, then authenticates its own wallet through https://live-sasame.sasame.online/mcp and submits an eligible Bid to this exact Demand via gec_bid_submit.",
+        "After Award, the provider delivers bounded raw/redacted protocol evidence for the exercised path, including timestamps, MCP protocol revision where observable, JSON-RPC method/tool names, HTTP/result status, and non-secret response evidence sufficient to reproduce the sequence; authorization headers, cookies, OAuth tokens, wallet signatures, private keys, recovery material and other secrets must be absent.",
+        "The provider also delivers a concise machine-readable and human-readable summary mapping the evidence to discovery, Demand inspection, authentication/participant readiness, and Bid submission, and identifies exact friction or ambiguity observed. A narrative summary without reproducible bounded evidence does not satisfy completion.",
+        "Independent verification reviews the delivered raw/redacted evidence and summary against the canonical GEC ledger evidence for the participant/Bid. Missing attribution, synthetic/self activity, failed or ineligible Bid, secret leakage, or evidence mismatch remains FAIL/UNKNOWN rather than being promoted to success.",
+        "The declared budget cap is 5 USDC (5000000 microUSDC) and is not proof of reserved funds or payment. Any later Award, delivery, verification and payment must use the existing canonical GEC lifecycle; creation of this Demand itself moves no funds.",
+        "No second marketplace, scheduler, provider registry, execution ledger, custody rail or settlement path is introduced. Owner, Pancho, SaSame-controlled, monitoring, probe, bootstrap or synthetic activity receives zero external-provider, external-demand, revenue or organic-validation credit."
+      ],
+      "required_capabilities": [
+        "mcp_protocol_testing",
+        "gec_provider_onboarding",
+        "oauth_wallet_authentication",
+        "evidence_capture",
+        "agent_security",
+        "gec_bidding"
+      ],
+      "accepted_at": "2026-10-21T08:02:12.145Z",
+      "status": "QUEUED",
+      "factory_execution": null,
+      "execution_ledger": "GitHub Issue authority + Factory Order + worktree/lease + derived TaskState/cache + receipt evidence",
+      "note": "Queued to the trusted internal GEC bridge. User MCP still has no repository execution authority."
+    }
+  }
+}
