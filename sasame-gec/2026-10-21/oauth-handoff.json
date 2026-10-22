@@ -1,0 +1,51 @@
+{
+  "captured_at": "2026-10-21T07:53:20Z",
+  "events": [
+    {
+      "type": "request",
+      "method": "GET",
+      "url": "https://sasame.online/account/mcp/participant-connect"
+    },
+    {
+      "type": "request",
+      "method": "GET",
+      "url": "https://live-sasame.sasame.online/authorize?response_type=code&client_id=https%3A%2F%2Fsasame.online%2Faccount%2Fmcp%2Fparticipant-client&redirect_uri=https%3A%2F%2Fsasame.online%2Faccount%2Fmcp%2Fparticipant-callback&code_challenge=midcMGd50HlDmZDhiIjJxYtvo4wWyNVu08bV8klyGbg&code_challenge_method=S256&scope=account.read&resource=https%3A%2F%2Flive-sasame.sasame.online%2Fmcp&state=[REDACTED]"
+    },
+    {
+      "type": "request",
+      "method": "GET",
+      "url": "https://sasame.online/account/mcp/authorize?mcp_state=[REDACTED]&mcp_base=https%3A%2F%2Flive-sasame.sasame.online"
+    },
+    {
+      "type": "response",
+      "status": 200,
+      "url": "https://sasame.online/account/mcp/authorize?mcp_state=[REDACTED]&mcp_base=https%3A%2F%2Flive-sasame.sasame.online"
+    },
+    {
+      "type": "request",
+      "method": "POST",
+      "url": "https://sasame.online/account/mcp/authorize?mcp_state=[REDACTED]&mcp_base=https%3A%2F%2Flive-sasame.sasame.online"
+    },
+    {
+      "type": "response",
+      "status": 200,
+      "url": "https://sasame.online/account/mcp/authorize?mcp_state=[REDACTED]&mcp_base=https%3A%2F%2Flive-sasame.sasame.online"
+    },
+    {
+      "type": "request",
+      "method": "GET",
+      "url": "https://live-sasame.sasame.online/oauth/callback?mcp_state=[REDACTED]&participant_id=participant%3Awallet%3Acf01a2dc00b33f9c14f330a76d71e84f&wallet_id=wallet%3Aevm%3A2677cc1d2f583d34917ed3d26ab11abf&wallet_address=0x1659c37bc2f7bcc59efa836d921585dc87404ae2&chain_id=0x2105&wallet_expires_at=2026-10-21T19%3A50%3A44.332Z&wallet_assertion=[REDACTED]"
+    },
+    {
+      "type": "request",
+      "method": "GET",
+      "url": "https://sasame.online/account/mcp/participant-callback?code=[REDACTED]&iss=https%3A%2F%2Flive-sasame.sasame.online&state=[REDACTED]"
+    },
+    {
+      "type": "response",
+      "status": 200,
+      "url": "https://sasame.online/account/mcp/participant-callback?code=[REDACTED]&iss=https%3A%2F%2Flive-sasame.sasame.online&state=[REDACTED]"
+    }
+  ],
+  "note": "Сырые заголовки, cookies, code/state и body не публикуются."
+}
