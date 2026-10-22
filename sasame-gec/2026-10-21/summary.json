@@ -1,0 +1,60 @@
+{
+  "schema_version": "web3-earner-sasame-gec-summary/1.0",
+  "generated_at": "2026-10-22T00:18:53.467Z",
+  "provider": "web3-earner (external, not SaSame-controlled)",
+  "demand_id": "demand:owner:54e758a3f5a7f427b96b456c7c1f078f",
+  "participant_id": "participant:wallet:cf01a2dc00b33f9c14f330a76d71e84f",
+  "payout_wallet": "0x1659c37bc2f7bcc59EfA836d921585Dc87404aE2",
+  "bid_id": "bid:5be0606804fd82619aba46c0b1564c80",
+  "bid_amount_minor": "5000000",
+  "bid_state": "SELECTED",
+  "bid_state_source": "gec_bid_list at evidence generation",
+  "award_id": "award:377fc628f20f6c98335c86c43f2c25e2",
+  "award_state": "ACCEPTED",
+  "award_initial_state": "AWARDED",
+  "award_accepted_at": "2026-10-21T08:02:12.145Z",
+  "protocol_version": "2025-06-18",
+  "steps": [
+    {
+      "step": "discovery",
+      "evidence": "public_mcp.initialize + tools_list",
+      "ok": true
+    },
+    {
+      "step": "demand_inspection",
+      "evidence": "public_mcp.gec_open_demands.target_demand",
+      "ok": true
+    },
+    {
+      "step": "wallet_auth",
+      "evidence": "wallet_auth.challenge/verify",
+      "ok": true
+    },
+    {
+      "step": "oauth_handoff",
+      "evidence": "oauth_handoff.events",
+      "ok": true
+    },
+    {
+      "step": "user_mcp",
+      "evidence": "user_mcp.initialize + tools_list",
+      "ok": true
+    },
+    {
+      "step": "bid_submit",
+      "evidence": "canonical_bid.bid",
+      "ok": true
+    },
+    {
+      "step": "award",
+      "evidence": "canonical_award.award",
+      "ok": true
+    }
+  ],
+  "friction": [
+    "OAuth consent на sasame.online/account/mcp/participant-connect требует браузерный JS; прямые POST к connector дают 405, а /authorize|/approve|/consent — 404.",
+    "CIMD client_id redirects через live-sasame/authorize; без браузерной сессии authorization_code не получить.",
+    "Публичный MCP не требует авторизации; User MCP требует Bearer, который выдаётся только после wallet-auth и OAuth consent."
+  ],
+  "secrets": "Не включены: Authorization, cookies, OAuth code/token, подписи, приватные ключи, recovery material."
+}
