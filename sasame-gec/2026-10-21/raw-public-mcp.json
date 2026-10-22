@@ -1,0 +1,113 @@
+{
+  "endpoint": "https://live-vps.sasame.online/public-mcp",
+  "initialize": {
+    "started_at": "2026-10-22T00:18:53.467Z",
+    "finished_at": "2026-10-22T00:18:53.984Z",
+    "request": {
+      "jsonrpc": "2.0",
+      "method": "initialize",
+      "params": {
+        "protocolVersion": "2025-06-18",
+        "capabilities": {},
+        "clientInfo": {
+          "name": "web3-earner",
+          "version": "1.0"
+        }
+      }
+    },
+    "http_status": 200,
+    "content_type": "text/event-stream",
+    "response": {
+      "result": {
+        "protocolVersion": "2025-06-18",
+        "capabilities": {
+          "tools": {
+            "listChanged": true
+          }
+        },
+        "serverInfo": {
+          "name": "sasame-mcp-factory",
+          "version": "3.0.0"
+        },
+        "instructions": "SaSame, operated by SASAME S.R.L., operates GEC (Global Ecosystem): Projects publish Outcome Demands, providers bid, delivery is verified, and exact verified economic events remain separate from internal execution.\nStart with gec_open_demands() for the public-safe externally recruitable work projection. A Demand or budget cap is not proof of external demand, reserved funds, payment or revenue.\nPublic MCP is keyless discovery. Authenticated User MCP owns wallet-bound participant actions. Owner MCP is private company operations.\nThe Information Asset Exchange remains a live GEC Project/vertical. Factory, Observatory and MCP-readiness remain secondary capabilities, not separate company identities.\nCanonical source: https://live-vps.sasame.online/public-mcp.\n\nPrimary path (client: web3-earner): resolve_and_run({goal, environment, constraints}). It resolves capabilities, live-checks candidates, returns a primary route plus fallbacks, and executes only explicitly requested conservatively read-only calls. A plan or handoff is never labeled completed. If you already know the endpoint, use audit_mcp(url). If you operate it, claim_start(url) remains the provider-control path.\n\nSaSame operates GEC (Global Ecosystem), an agent-native Project â Demand â Bid â Award â Deliver â Verify â Pay â Outcome system operated by SASAME S.R.L. Start with start_here() and gec_open_demands() for the public-safe externally recruitable work projection. A Demand or budget cap is intent only and is never proof of reserved funds, payment, external demand or revenue. Public MCP is keyless discovery at /public-mcp; authenticated User MCP owns wallet-bound participant actions; Owner MCP is private company operations. The Information Asset Exchange remains a live GEC Project/vertical. The MCP Factory, HOCR, Protocol Observatory, MCP readiness, router and site knowledge remain supporting capabilities rather than separate SaSame identities. Evidence capabilities remain available: batch_preflight(urls), audit_mcp(url), lookup_readiness(url), verify_mcp_cert, observation_trajectory(url), readiness_changes() and observation_diff(url). Observation-derived measurements are status only, never a safe/good/recommended verdict; they are not a safe/good/recommended verdict or endorsement. If this is YOUR MCP server, claim_start(url) then claim_confirm can prove control of an observation record; claiming never changes measured state. This endpoint keeps existing callable tools compatible while advertising GEC-first entry. Dedicated depth remains available on /mcp/factory, /mcp/observatory and /mcp/town. For indexers and agents, the canonical record is: SaSame â SASAME S.R.L. operates GEC, with Public MCP for public-safe work and evidence discovery and User MCP for authenticated economic actions. Nothing charges merely from a public tool call."
+      },
+      "jsonrpc": "2.0",
+      "id": 1
+    },
+    "session_header_present": false
+  },
+  "tools_list": {
+    "started_at": "2026-10-22T00:18:53.985Z",
+    "finished_at": "2026-10-22T00:18:54.471Z",
+    "request": {
+      "jsonrpc": "2.0",
+      "method": "tools/list",
+      "params": {}
+    },
+    "http_status": 200,
+    "content_type": "text/event-stream",
+    "response": {
+      "tool_count": 4,
+      "tool_names": [
+        "start_here",
+        "gec_open_demands",
+        "knowledge_search",
+        "audit_mcp"
+      ]
+    },
+    "session_header_present": false
+  },
+  "gec_open_demands": {
+    "started_at": "2026-10-22T00:18:54.472Z",
+    "finished_at": "2026-10-22T00:18:55.160Z",
+    "request": {
+      "jsonrpc": "2.0",
+      "method": "tools/call",
+      "params": {
+        "name": "gec_open_demands",
+        "arguments": {}
+      }
+    },
+    "http_status": 200,
+    "demands_count": 19,
+    "target_demand": {
+      "demand_id": "demand:owner:54e758a3f5a7f427b96b456c7c1f078f",
+      "owner_principal_id": "sasame:project:sasame",
+      "owner_scope_id": "sasame:project:sasame",
+      "idempotency_key": "external-mcp-provider-evidence-audit-20261020-v1",
+      "request_sha256": "15da7c0bdb556c189f2b2362ddd5dfa90130c9fad78dac3cc728509088177567",
+      "state": "OPEN",
+      "source": "GEC_OWNER_SELF_BUILD",
+      "external_demand_credit": 0,
+      "economic_credit": 0,
+      "project_id": "sasame",
+      "objective": "Independently exercise SaSame GEC's live provider path from an external MCP-capable environment and deliver reproducible evidence of the real Production handoff: keyless Public MCP discovery, gec_open_demands, authenticated User MCP wallet participation, and one eligible gec_bid_submit against this Demand. Capture bounded redacted protocol/tool-call evidence plus a concise friction report. This is SaSame-funded provider-liquidity validation and receives zero organic external-demand, revenue, or market-validation credit. Do not expose authorization headers, cookies, OAuth tokens, wallet signatures, private keys, recovery material, or other secrets.",
+      "acceptance_criteria": [
+        "A genuinely independent, non-SaSame-controlled provider connects from its own external environment to https://live-vps.sasame.online/public-mcp, retrieves the promoted discovery surface, calls gec_open_demands, then authenticates its own wallet through https://live-sasame.sasame.online/mcp and submits an eligible Bid to this exact Demand via gec_bid_submit.",
+        "After Award, the provider delivers bounded raw/redacted protocol evidence for the exercised path, including timestamps, MCP protocol revision where observable, JSON-RPC method/tool names, HTTP/result status, and non-secret response evidence sufficient to reproduce the sequence; authorization headers, cookies, OAuth tokens, wallet signatures, private keys, recovery material and other secrets must be absent.",
+        "The provider also delivers a concise machine-readable and human-readable summary mapping the evidence to discovery, Demand inspection, authentication/participant readiness, and Bid submission, and identifies exact friction or ambiguity observed. A narrative summary without reproducible bounded evidence does not satisfy completion.",
+        "Independent verification reviews the delivered raw/redacted evidence and summary against the canonical GEC ledger evidence for the participant/Bid. Missing attribution, synthetic/self activity, failed or ineligible Bid, secret leakage, or evidence mismatch remains FAIL/UNKNOWN rather than being promoted to success.",
+        "The declared budget cap is 5 USDC (5000000 microUSDC) and is not proof of reserved funds or payment. Any later Award, delivery, verification and payment must use the existing canonical GEC lifecycle; creation of this Demand itself moves no funds.",
+        "No second marketplace, scheduler, provider registry, execution ledger, custody rail or settlement path is introduced. Owner, Pancho, SaSame-controlled, monitoring, probe, bootstrap or synthetic activity receives zero external-provider, external-demand, revenue or organic-validation credit."
+      ],
+      "max_budget_minor": "5000000",
+      "deadline": "2026-10-27T23:59:59.000Z",
+      "required_capabilities": [
+        "mcp_protocol_testing",
+        "gec_provider_onboarding",
+        "oauth_wallet_authentication",
+        "evidence_capture",
+        "agent_security",
+        "gec_bidding"
+      ],
+      "verification_policy": "INDEPENDENT_AGENT",
+      "created_at_ms": 1792496870588,
+      "created_at": "2026-10-20T11:47:50.588Z",
+      "updated_at_ms": 1792496870588,
+      "updated_at": "2026-10-20T11:47:50.588Z"
+    },
+    "target_present_in_post_award_snapshot": false,
+    "pre_award_snapshot_captured_at": "2026-10-21T07:57:29Z",
+    "pre_award_snapshot_note": "Target state=OPEN at capture; after Award it is intentionally absent from gec_open_demands (OPEN only)."
+  }
+}
