@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The ruler measures coverage, not accuracy — an audit of boar-bench v0.4 / LabRat DEVICE-FINAL</title>
+<style>
+  :root{
+    --ink:#12161c; --muted:#5b6675; --line:#e2e6ec; --bg:#ffffff; --soft:#f6f8fa;
+    --accent:#b4232a; --accent-soft:#fdf0f0; --ok:#1d6f47; --ok-soft:#eff8f2;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px; margin:0 auto; padding:56px 24px 88px}
+  header{border-bottom:3px solid var(--ink); padding-bottom:22px; margin-bottom:34px}
+  .kicker{font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600}
+  h1{font-size:33px; line-height:1.18; letter-spacing:-.015em; margin:12px 0 10px; font-weight:750}
+  .sub{color:var(--muted); font-size:15.5px; margin:0}
+  h2{font-size:22px; line-height:1.25; margin:52px 0 14px; letter-spacing:-.01em; font-weight:700;
+     padding-top:22px; border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent); font-variant-numeric:tabular-nums}
+  h3{font-size:13px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted);
+     margin:30px 0 10px; font-weight:700}
+  p{margin:0 0 15px}
+  strong{font-weight:650}
+  code{font:13.5px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+       background:var(--soft); padding:1.5px 5px; border-radius:4px; border:1px solid var(--line)}
+  a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(180,35,42,.28)}
+  a:hover{border-bottom-color:var(--accent)}
+  .verdict{background:var(--soft); border-left:4px solid var(--ink); padding:20px 22px; margin:0 0 30px}
+  .verdict p:last-child{margin-bottom:0}
+  .verdict .label{font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+                  color:var(--muted); font-weight:700; margin-bottom:8px}
+  table{width:100%; border-collapse:collapse; margin:16px 0 20px; font-size:14.5px}
+  th,td{text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+  th{font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted);
+     border-bottom:1.5px solid var(--ink); font-weight:700; white-space:nowrap}
+  td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+  tbody tr:nth-child(even){background:#fbfcfd}
+  .hi{color:var(--accent); font-weight:700}
+  .good{color:var(--ok); font-weight:650}
+  .note{font-size:13.5px; color:var(--muted); margin:-6px 0 20px}
+  ol,ul{margin:0 0 18px; padding-left:22px}
+  li{margin-bottom:9px}
+  ol.numbered{counter-reset:none}
+  .callout{border:1px solid var(--line); border-radius:10px; padding:18px 20px; margin:20px 0;
+           background:#fcfdfe}
+  .callout p:last-child{margin-bottom:0}
+  .fix{background:var(--ok-soft); border:1px solid #cfe7da; border-radius:10px; padding:18px 20px; margin:22px 0}
+  .fix p:last-child{margin-bottom:0}
+  .fix .label{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--ok);
+              font-weight:700; margin-bottom:8px}
+  .warn{background:var(--accent-soft); border:1px solid #f2d3d3; border-radius:10px; padding:18px 20px; margin:22px 0}
+  .warn .label{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent);
+               font-weight:700; margin-bottom:8px}
+  .warn p:last-child{margin-bottom:0}
+  pre{background:#0f1419; color:#e6edf3; padding:18px 20px; border-radius:10px; overflow-x:auto;
+      font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; margin:18px 0}
+  pre code{background:none; border:none; color:inherit; padding:0; font-size:13px}
+  .refs{font-size:13.5px; color:var(--muted)}
+  .refs li{margin-bottom:6px}
+  footer{margin-top:60px; padding-top:20px; border-top:1px solid var(--line);
+         font-size:13px; color:var(--muted)}
+  .bar{display:flex; align-items:center; gap:10px; margin:6px 0 2px}
+  .bar .track{flex:1; height:9px; background:var(--soft); border-radius:5px; overflow:hidden; border:1px solid var(--line)}
+  .bar .fill{height:100%; background:var(--accent)}
+  .bar .fill.ok{background:var(--ok)}
+  .bar .cv{font-variant-numeric:tabular-nums; font-size:13px; color:var(--muted); min-width:52px; text-align:right}
+  @media (max-width:620px){
+    .wrap{padding:32px 16px 64px}
+    h1{font-size:26px}
+    h2{font-size:19px}
+    table{font-size:13px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Independent audit · POIDH bounty #534 · 3 November 2026</div>
+  <h1>The ruler measures coverage, not accuracy — and the health gate zeroes the one thing it can answer</h1>
+  <p class="sub">An audit of <code>boar-bench</code> v0.4 and the LabRat phone run (<code>DEVICE-FINAL</code>),
+  built by recomputing the published judgments rather than reading the summaries. Every number below comes
+  from the public artifacts named next to it, and all of it reproduces in one sitting. Where I could not
+  check something, I say so.</p>
+</header>
+
+<div class="verdict">
+  <div class="label">Verdict up front</div>
+  <p>The record is unusually honest, and the conclusion “below the 0.50 bar” survives every check I ran.
+  What does not survive is the <em>reading</em> of 0.165 as “16.5 % as good as internet plus a frontier AI.”
+  On this ruler that number is mostly a statement about how many key points a 36-word answer covers against
+  a 700-word reference — and the reference side of the ratio is pinned at the rubric ceiling
+  (<strong>96.9 %</strong> of its maximum) on every single item, so the ratio is not doing the normalising
+  work the spec claims for it. Two of the three defects below are cheap to fix; one of them is worth more
+  than any experiment left in the record.</p>
+</div>
+
+<h2><span class="num">01</span> — The 0.50 bar is a coverage bar</h2>
+<p>The app's accuracy is 2.3× better than its coverage, and the ratio cannot see the difference.</p>
+
+<h3>Evidence</h3>
+<p>Recomputed from the raw judgments — <code>boar-traces</code>,
+<code>rnd/research/coordinator/arms/device-final/judge/dev-s42.opus.judgments.jsonl</code>, 150 rows
+= 75 items × 2 presentation orders — using the rubric written in
+<code>boar-bench/scorers/vendor/eval-lib/judge-core.mjs:40-43</code>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Axis (mean over both orders, seed 42, Opus judge)</th>
+      <th class="num">LabRat</th>
+      <th class="num">Reference</th>
+      <th class="num">ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>correctness</td><td class="num"><strong>2.55</strong></td><td class="num">4.71</td><td class="num">0.54</td></tr>
+    <tr><td>completeness</td><td class="num"><strong>1.18</strong></td><td class="num">4.93</td><td class="num hi">0.24</td></tr>
+    <tr><td>usefulness</td><td class="num"><strong>1.30</strong></td><td class="num">4.99</td><td class="num hi">0.26</td></tr>
+  </tbody>
+</table>
+
+<p>The ratio of sums (U-total = Σw·u / Σw·r, <code>RULER-SPEC-v1-r4</code> §3.4) is 0.167 for this seed.
+Splitting the deficit by axis: correctness carries ~20 % of it, completeness + usefulness ~80 %. So the
+metric is not primarily measuring whether LabRat is <em>right</em>.</p>
+
+<p>Four consequences, each checkable:</p>
+
+<ol>
+  <li><strong>A factually correct answer is capped at ≈0.6.</strong> <code>cw-001</code> (“capital of
+  Kazakhstan”): the app says Astana, correctly, and the judge gives it correctness 5/5 in both orders — and
+  completeness 2, usefulness 3. m = 3.33/5 against the reference's 4.88/5 → per-item U = <strong>0.583</strong>.
+  Fifteen of the 71 headline items have mean correctness ≥ 4 (the answer is right); only <strong>3 of those
+  15</strong> reach per-item U ≥ 0.50, and the best item in the whole set is <strong>0.727</strong>
+  (<code>cw-020</code>). Nothing in the set exceeds 0.73.</li>
+
+  <li><strong>The denominator is saturated, so U is an absolute score in disguise.</strong> Reference mean
+  rubric 4.878/5; floor-adjusted mass <strong>3.878 out of a possible 4.0 = 96.9 %</strong>; <strong>75 of
+  75</strong> headline items sit at exactly 5.0/5 under Opus (71/75 under gpt-5.6-sol, 4.782/5).
+  Reference completeness is 5 on 140 of 150 order-rows. U therefore reduces to (m<sub>app</sub> − 1) / 3.878.
+  As a normaliser the denominator carries essentially no item-level information: corr(app mass, ref mass)
+  = <strong>+0.05</strong>, and mean ref mass is 3.878 / 3.876 / 3.889 across the bottom, middle and top
+  third of app answers. The spec's promise (§3.2, “a frozen reference denominator so every run shares the
+  same denominator”) is true but empty — it is a constant, not a difficulty control. The 0.50 bar is exactly
+  “mean rubric 2.94/5”; the app is at 1.68.</li>
+
+  <li><strong>The length asymmetry is 19× and was never measured on this ruler.</strong> Median answer
+  length: LabRat <strong>220 characters (36 words)</strong>, reference <strong>4,174 characters</strong>
+  (<code>bench/v0.4/refs/v2/claude.jsonl</code>). The app ships Succinct style only — no Detailed, no length
+  option (<code>data/glossary.md</code>, G-boarlite). The project already ran this experiment once:
+  <code>arms/lengthshare/LENGTHSHARE.md</code> re-judged the <em>same</em> answers against references
+  condensed to ≤80 words and got floor-adjusted <strong>0.412 → 0.514 (+0.102, CI +0.068…+0.144)</strong>,
+  deep tier, V-para, 51 ids, ~280-word references. That was on the old scale, with references already 2.5×
+  shorter than v0.4's. It was not repeated on v0.4, and the v0.4 headline inherits an unmeasured length
+  share.</li>
+
+  <li><strong>The honest counter-check, in the record's favour:</strong> within the app's own range, longer
+  answers did <em>not</em> score better — corr(answer chars, app m) = <strong>−0.04</strong> over 39–650
+  characters, and the project's own “detailed persona” arm lost 0.066 on the deep tier. So “just write more”
+  is not the fix; the fix is <em>coverage of the notes' key points</em>, which the Succinct pipeline does not
+  attempt.</li>
+</ol>
+
+<h3>Where the app sits against the bar</h3>
+
+<div class="bar"><span style="min-width:210px;font-size:13.5px;">Mean rubric score</span>
+  <span class="track"><span class="fill" style="width:34%"></span></span><span class="cv">1.68</span></div>
+<div class="bar"><span style="min-width:210px;font-size:13.5px;">0.50 bar (= 2.94 rubric)</span>
+  <span class="track"><span class="fill" style="width:59%"></span></span><span class="cv">2.94</span></div>
+<div class="bar"><span style="min-width:210px;font-size:13.5px;">Reference family</span>
+  <span class="track"><span class="fill ok" style="width:97.6%"></span></span><span class="cv">4.88</span></div>
+
+<h3>Why it matters</h3>
+<p>The headline sentence — “0 of 71 wins, U-total 0.165, below the 0.50 bar” — is read by every downstream
+agent (the site's own <code>llms.txt</code> mandates that reading) as “the app is a sixth as good as
+frontier + web.” What was measured is “the app's answers cover about a quarter of the key points that a
+700-word web-searched reference covers, while being right more than half as often.” Those are different
+claims, and only the second one tells you what to build next. It also makes the bar's difficulty invisible:
+a perfect-but-terse answer tops out near 0.6–0.7 on this instrument, so 0.50 is not “half as good” but
+“~75–85 % of a perfect short answer.”</p>
+
+<div class="fix">
+  <div class="label">Suggested fix — one afternoon, no generation</div>
+  <p>Re-run LENGTHSHARE on v0.4 and publish both numbers: cap the two reference families to ≤120 words with
+  a frozen prompt (142 capping calls), re-judge the existing 71 app answers against them (284 judge calls),
+  report U-total paired Δ with its CI, exactly as <code>arms/lengthshare</code> did. Two outcomes and both
+  are useful. If U moves &lt; +0.03, the “83 % substance” reading holds on the ruler too and the headline is
+  safe. If it moves +0.10 or more, the headline needs the qualifier (“against references of equal length: X”)
+  and the product decision changes — the lever is answer coverage, not a bigger model. Report the ceiling
+  (per-item max 0.73) and the correct-answer band (0.25–0.73) next to the bar in every table.</p>
+</div>
+
+<h2><span class="num">02</span> — The health gate turns 5 of 11 health items into hard zeros</h2>
+<p>Four of the five were answerable from the packs already installed on the phone.</p>
+
+<h3>Evidence</h3>
+<p><code>bench/v0.4/items.jsonl</code> has 11 items tagged <code>tags.health_safety</code>. In the phone run
+(<code>traces/dev-s42.traces.jsonl</code>) <strong>five</strong> of them take the path
+<code>health-fixed</code>, with <code>tokens: [1]</code>, <code>kept: false</code>,
+<code>refusedZ: true</code>:</p>
+
+<table>
+  <thead>
+    <tr><th>item</th><th>question (abridged)</th><th>FACT-AVAIL</th><th>packs have it</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>cw-021</code></td><td>normal resting heart rate for an adult</td><td><strong>AVAILABLE</strong></td><td>yes</td></tr>
+    <tr><td><code>cw-022</code></td><td>why altitude sickness happens, how to avoid it</td><td><strong>AVAILABLE</strong></td><td>yes</td></tr>
+    <tr><td><code>cw-025</code></td><td>malaria and mosquito bites, rural Kenya</td><td>NONE</td><td>no</td></tr>
+    <tr><td><code>cx-021</code></td><td>which mosquitoes spread dengue, when they bite</td><td><strong>AVAILABLE</strong></td><td>yes</td></tr>
+    <tr><td><code>cx-023</code></td><td>why antibiotics don't cure a cold, resistance</td><td><strong>AVAILABLE</strong></td><td>yes</td></tr>
+  </tbody>
+</table>
+
+<p>The answer in all five cases is the same fixed refusal: <em>“I don't have a reliable offline source on
+this, so I won't give health advice from memory. In an emergency, call your local emergency number…”</em>
+Under <code>RULER-SPEC-v1-r4</code> §3.1 a trace-flagged refusal gets <code>u := 0</code>
+(<code>m1_agg.py:30</code>), so those items contribute zero mass while still contributing their full
+reference mass to the denominator.</p>
+
+<p>The cause is a configuration interaction, not a knowledge gap. <code>arms/searchport/SEARCHPORT.md</code>
+(Addendum 2) defines <code>SearchPort.Mode {OFF, ON, ON_NO_HEALTH}</code>: <em>“AnswerPipeline(plainRetrieve)
+sends a turn HealthGate.isHealth reads as health (follow-ups included) through the port-off search and skips
+the head pass.”</em> LabRat ships <code>ON_NO_HEALTH</code> (<code>DEVICE-FINAL.md</code>, “System”). So for
+exactly the questions the six text packs cover best — MedlinePlus and first-aid are installed in the 3 GB APK
+— retrieval is switched off, the gate finds no source, and the gate's fixed text is a refusal. The record's
+M2 metric (“53 of 65 safety probes get the fixed safe text”) counts this path as a <em>success</em>, while on
+the ruler the same path is a zero.</p>
+
+<p>I checked the neighbouring explanation: it is not the judge being harsh on declinations. The five texts
+were scored (correctness 1, completeness 2, usefulness 2 — the “call emergency services” line earns
+something) before the z-override zeroed them; the zero is the spec's, and it is applied correctly.</p>
+
+<p>Cost, stated honestly: health items carry weight 0.5, so fixing all five at the app's median answered
+quality moves U-total by only <strong>+0.006</strong>, and at its best-answered quality by
+<strong>+0.019</strong>. This is not a headline-moving number. It is a product number: <strong>45 % of the
+health questions in the ruler are answered with “I won't,”</strong> and three of them (“normal resting heart
+rate,” “why do people get altitude sickness”) are the kind of question an offline travel-health app exists
+for.</p>
+
+<h3>Why it matters</h3>
+<p>The record's thesis is “a harness around a small model's real capabilities: health gate, code-computed
+arithmetic, pack search and delivery.” On the one ruler that is independent of the project, the health gate
+is not a capability, it is the failure mode — and it fires hardest where the packs would have worked. The same
+mechanism explains a result the record cannot otherwise explain: U on FACT-AVAIL <code>AVAILABLE</code> items
+(0.143) is <em>lower</em> than on <code>NONE</code> items (0.159, Opus pooled, <code>m1.json</code>), because
+four of the nineteen AVAILABLE items are health items that the gate refuses to look at.</p>
+
+<div class="fix">
+  <div class="label">Suggested fix — one line + one protocol already written</div>
+  <p>Set the health branch to retrieve first and gate after: <code>SearchPort.Mode.ON</code> with
+  <code>HealthGate.fixedText</code> evaluated on the final sources — which is exactly the Addendum-1
+  configuration (“the head pass + SearchPort.fit run before HealthGate.fixedText, so the gate sees appended
+  sources”). <code>SEARCHPORT.md</code> rejected it because of a grounded-dose regression on the 65 probes
+  (9 ungrounded vs 5); that rule is the right rule, so scope it: keep the gate's hard path for
+  dose/emergency phrasing (<code>HealthGate</code> B+FU terms) and let explanation-type health questions
+  search. Two unit tests already exist for the mode. Verify with the existing protocol: the 65 probes
+  (grounded-dose rule) plus the 11 ruler health items, and report the pair.</p>
+</div>
+
+<h2><span class="num">03</span> — Two published numbers do not survive a re-read</h2>
+<p>The win-rate is degenerate by construction, and the pooled CR contradicts its own report.</p>
+
+<h3>Evidence</h3>
+<p><strong>(a) “0 of 71 wins” carries no information.</strong> <code>combineOrders</code>
+(<code>judge-core.mjs:94-98</code>) keeps a verdict only when both presentation orders agree, else it is a
+tie. Against a reference that scores 4.88/5, an answer would have to beat a near-perfect answer twice in a
+row; the app wins 0 of 71 under both families and 1 tie. That is the expected output of the design, not an
+independent finding — and yet the house citation rule puts it first (“lead with the win-rate,”
+<code>llms.txt</code>) and it is the first clause of F-2238. A statistic that is 0 by construction cannot rank
+systems that are all below the ceiling; U can.</p>
+
+<p><strong>(b) A pooled number the report says is not reported.</strong> <code>DEVICE-FINAL.md</code>:
+<em>“Pooled CR is not reported (pooling orders across seeds distorts the ≥4 count)”</em>. But
+<code>aggregates/m1.json</code> publishes <code>pooled.G1.CR = 0.1395</code> and
+<code>correct_per_100 = 14.08</code>, while the two per-seed values are <strong>0.186</strong> and
+<strong>0.178</strong> (18.31 both) — the pooled figure is 21 % lower than either seed, exactly the
+distortion the report warns about, and it is the number a reader who loads the JSON will take away.
+(G2: 0.269 / 0.244 per seed vs 0.168 pooled.)</p>
+
+<p>Also worth one line in the record: <code>abs_ref</code> is 3.88/4.0, so CR's denominator — the share of
+references scored “correct” (mean correctness ≥ 4) — is ≈ 0.96 and saturates too; CR inherits the same
+ceiling problem as U.</p>
+
+<h3>Why it matters</h3>
+<p>Both are small, but they are the kind of thing that decides whether a reader trusts the rest. The record's
+central virtue is that it publishes everything, including the numbers that undercut it; a non-reported number
+sitting in a published aggregate, and a headline statistic that is 0 by construction, are the two places
+where “publish everything” and “say what it means” came apart.</p>
+
+<div class="fix">
+  <div class="label">Suggested fix</div>
+  <p>Drop <code>pooled.CR</code> / <code>pooled.correct_per_100</code> from the aggregate, or mark them
+  <code>do_not_report: true</code> with the reason (the report already states it). Replace the win-rate in the
+  headline with “median per-item U and the count of items above 0.5” (3 of 71 here) and keep 0/71 as a
+  footnote — same honesty, more signal.</p>
+</div>
+
+<h2><span class="num">04</span> — What I could not check</h2>
+<ul>
+  <li><strong>The two judge families use one reference family each</strong> (<code>m1.json</code> note;
+  F-2238 caveat: “One reference family per judge family”). The spec (§3.2, REFVAR) asks for both references
+  per item with the mean as the denominator. Both numbers are still below the bar, so no conclusion changes,
+  but the “min over families” rule compares two different denominators and two different judges at once; the
+  family gap (0.165 vs 0.242) cannot be attributed to judge severity or to reference strength from the
+  published files.</li>
+
+  <li><strong>Stage 1 (DECLINE2STAGE) was not run</strong> on this matrix (<code>m1.json</code> note), so the
+  refusal zero rests on the app's own trace flag alone; and the three-variant decline arm that §4.1 requires
+  for judge validity (U ≤ 0.05) exists only on v0.1 dev data with a Haiku judge (bare 0.058 / hedged 0.053 /
+  fluent-no-content 0.016), never on v0.4 with Opus or gpt-5.6-sol.</li>
+
+  <li><strong>Delivery decomposition (H5, §2.4)</strong> — “title retrieved, not correct” vs “not retrieved”
+  — is not computable: the phone traces carry a boolean <code>kept</code> and no
+  <code>retrievedTitles</code>, and no passage text. So the claim “coverage 0.90” is the app's own flag, not a
+  verifiable retrieval measurement.</li>
+
+  <li><strong>I did not re-judge anything with a frontier model</strong> (no API budget here), so I cannot say
+  how many of the 71 judgments are wrong. I sampled all 15 zero-score items by hand: every one is a real
+  factual error (time zones, flight durations, pasta at altitude, “hash-based signatures are vulnerable to
+  quantum attacks,” Inca Trail in February). The judge is reliable at the bottom; the compression is at the
+  top.</li>
+</ul>
+
+<div class="warn">
+  <div class="label">What this audit does not claim</div>
+  <p>It does not claim the app performs better than 0.165, that the judges are wrong, or that the run was
+  executed badly. Every published number I re-derived matched. The claim is narrower and, I think, harder:
+  the metric's headline and the metric's behaviour point at different things, and only one of them tells you
+  what to build next.</p>
+</div>
+
+<h2><span class="num">05</span> — Reproduction</h2>
+<pre><code>git clone https://github.com/r4topunk/boar-research
+git clone https://github.com/r4topunk/boar-bench
+
+# traces (HuggingFace), same relative paths:
+#   rnd/research/coordinator/arms/device-final/judge/dev-s42.opus.judgments.jsonl
+#   rnd/research/coordinator/arms/device-final/judge/dev-s42.codex.judgments.jsonl
+#   rnd/research/coordinator/arms/device-final/traces/dev-s42.traces.jsonl
+
+python analyze.py   # every table above: axis means, per-item U, saturation,
+                    # health path counts, FACT-AVAIL, pooled vs per-seed CR</code></pre>
+<p class="note">The script is stdlib-only (no pandas, no network) and prints the numbers in the order they
+appear above.</p>
+
+<h3>Files I read, by claim</h3>
+<ul class="refs">
+  <li>Rubric and order combining — <code>boar-bench/scorers/vendor/eval-lib/judge-core.mjs</code> (lines 40–43, 94–98)</li>
+  <li>Metric definition — <code>coordinator/RULER-SPEC-v1-r4-2026-10-21.md</code> (§3.1 u = m−1, §3.2 REFVAR, §3.4 U = Σwu/Σwr, §4.1 decline arm)</li>
+  <li>Aggregation and refusal zeroing — <code>coordinator/arms/device-final/m1_agg.py</code> (line 30); aggregates in <code>m1.json</code></li>
+  <li>Run report — <code>coordinator/arms/device-final/DEVICE-FINAL.md</code> (“Pooled CR is not reported”)</li>
+  <li>Health mode — <code>coordinator/arms/searchport/SEARCHPORT.md</code> (Addendum 2, mode set)</li>
+  <li>Length precedent — <code>coordinator/arms/lengthshare/LENGTHSHARE.md</code> (0.412 → 0.514, ≤80-word references)</li>
+  <li>Items and references — <code>boar-bench/bench/v0.4/items.jsonl</code>, <code>refs/v2/claude.jsonl</code>; <code>DATASET_CARD.md</code>, <code>factavail-items.json</code></li>
+</ul>
+
+<footer>
+  Audit prepared for POIDH bounty #534 · artifacts: <code>analysis.md</code>, <code>analyze.py</code>,
+  <code>card.png</code> · 3 November 2026 · all figures recomputed from public repositories, no private data.
+</footer>
+
+</div>
+</body>
+</html>
