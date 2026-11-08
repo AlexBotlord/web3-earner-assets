@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Audit - RatLab / Boar Research (record 1.1.2)</title>
+<style>
+body{max-width:920px;margin:2rem auto;padding:0 1rem;font:16px/1.62 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#16181d}
+h1{font-size:1.75rem;line-height:1.25;margin-bottom:.4rem}
+h2{margin-top:2.1rem;font-size:1.28rem;border-bottom:1px solid #e3e6ea;padding-bottom:.3rem}
+h3{font-size:1.06rem;margin-top:1.5rem}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.9rem}
+th,td{border:1px solid #d6d9de;padding:.4rem .55rem;text-align:left;vertical-align:top}
+th{background:#f4f6f8}
+code{background:#f4f6f8;padding:.1rem .3rem;border-radius:3px;font-size:.9em}
+pre{background:#f7f8fa;padding:.8rem;overflow:auto;border-radius:6px}
+pre code{background:none;padding:0}
+blockquote{border-left:3px solid #cfd4da;margin:1rem 0;padding:.3rem 0 .3rem 1rem;color:#454b55}
+hr{border:0;border-top:1px solid #e3e6ea;margin:2rem 0}
+a{color:#0b62c4}
+</style></head><body>
+<h1>Audit — <em>RatLab: A Boar Research</em> (record 1.1.2, as of 2026-10-28)</h1>
+<p>Auditor: independent, working from the public files only.</p>
+<p>Scope: five headline claims recomputed from the published data; two findings, one wording note, and a list of what checks out.</p>
+<p><strong>Summary.</strong> Four of the five recomputed headline claims reproduce exactly (U-total, wins, refusals, the 48 %/26 % pack contrast, the 215 no-gain count). Two problems survive:</p>
+<p>(1) the health-safety panel is measured <strong>in-sample</strong> on the 65 probes the gate&#x27;s rules were fitted to, the headline attaches that caveat to the desktop number only, and the same aggregate (<code>m2.json</code>) contains a <em>worse</em> safety count (7 ungrounded figures on 6 probes) that the published fact drops in favour of the narrower &quot;2 new dose figures&quot;;</p>
+<p>(2) the record&#x27;s positive conclusion — &quot;the bottleneck is delivery/search, not the pack&quot; — rests on a <strong>between-item conditional</strong> (0.65 when the item&#x27;s own article is kept vs 0.28 when not) that the project&#x27;s own per-pack data do not support: across 9 packs, delivery rate and accuracy are uncorrelated (Spearman +0.17). Both are cheap to settle with runs the repository already contains.</p>
+<hr>
+<h2>Finding 1 — The delivery claim is not identified, and the per-pack data contradict it</h2>
+<p>Facts: <strong>F-1704, F-1705, F-1706</strong> (cited in the abstract and in chapter 14).</p>
+<p>Files: <code>research/rnd/research/coordinator/arms/packproof/aggregates/packproof.json</code>, <code>.../packproof/PACKPROOF.md</code>.</p>
+<p>The headline sentence: <em>&quot;with the matching pack the 1.7B main engine is right on 48 % vs 26 % without, 65 % when search delivers the item&#x27;s own article, which it does on 54 %&quot;</em>. The first half is fine; the second half is the project&#x27;s causal story (&quot;the bottleneck is search, not the pack&quot;).</p>
+<p>The 0.65 vs 0.28 split is <strong>conditional on the same item&#x27;s retrieval outcome</strong>, computed as a between-item comparison (<code>packproof.json</code> → <code>pooled.on_correct_given_kept = [0.653, 98]</code>, <code>on_correct_given_not_kept = [0.280, 82]</code>). Items whose own article is found are precisely the items with a well-known, lexically matchable topic — i.e. the easier items. Nothing in the design separates &quot;delivery helped&quot; from &quot;easy items are delivered&quot;.</p>
+<p>The record&#x27;s own per-pack table can test the delivery story, because pack-level delivery varies from 0.30 to 0.90:</p>
+<table><thead><tr><th>pack</th><th>kept</th><th>ON correct-any</th><th>correct\</th><th>kept</th><th>correct\</th><th>not-kept</th><th>Δ ON−OFF</th></tr></thead><tbody>
+<tr><td>qa-travel-se</td><td>0.85</td><td>0.55</td><td>0.588</td><td>0.333</td><td>+0.35</td></tr>
+<tr><td>qa-ethereum-se</td><td>0.50</td><td>0.55</td><td>0.800</td><td>0.300</td><td>+0.35</td></tr>
+<tr><td>qa-bitcoin-se</td><td>0.35</td><td>0.60</td><td>0.714</td><td>0.538</td><td>+0.45</td></tr>
+<tr><td>qa-health-se</td><td>0.55</td><td>0.60</td><td>0.818</td><td>0.333</td><td>+0.05</td></tr>
+<tr><td>qa-outdoors-se</td><td>0.55</td><td>0.35</td><td>0.455</td><td>0.222</td><td>+0.15</td></tr>
+<tr><td>boar-firstaid-en</td><td>0.30</td><td>0.35</td><td>0.833</td><td>0.143</td><td>+0.15</td></tr>
+<tr><td>boar-medlineplus-en</td><td>0.45</td><td>0.55</td><td>0.778</td><td>0.364</td><td>+0.05</td></tr>
+<tr><td>boar-factbook</td><td>0.45</td><td>0.25</td><td>0.444</td><td>0.091</td><td>+0.05</td></tr>
+<tr><td>boar-simplewiki-en</td><td>0.90</td><td>0.55</td><td>0.611</td><td>0.000</td><td>+0.45</td></tr>
+</tbody></table>
+<ul>
+<li><strong>Spearman(delivery rate, ON correct-any) = +0.17</strong> (n = 9). If delivery were the binding constraint, the pack that delivers 90 % of its own articles (simplewiki, 0.55 correct) could not score the same as the pack that delivers 50 % (ethereum, 0.55) and nearly the same as the pack that delivers 85 % (travel, 0.55).</li>
+<li><strong>Spearman(delivery rate, correct|kept) = −0.36</strong>: the <em>more</em> a pack delivers, the <em>lower</em> the accuracy conditional on delivery — the signature of an easiness gradient, not of a delivery lever.</li>
+<li>The two packs where the pack adds almost nothing (+0.05) are the two health packs, whose <strong>OFF</strong> accuracy is already 0.55 / 0.50 (the model knows these facts): the conditional is high there because the items are easy, not because the passage arrived.</li>
+<li>The pooled Δ CI is item-level. Treated as 9 pack clusters, the nine per-pack deltas (mean +0.228, sd 0.172) give a 95 % CI of <strong>+0.10 … +0.36</strong> (t₈ = 2.306), against the record&#x27;s +0.16 … +0.31. Still positive, three times wider; 6 of 9 packs have their own CI touching zero (<code>d_correct_any</code> in <code>packproof.json</code>).</li>
+</ul>
+<p><strong>Consequence.</strong> &quot;Delivery is the bottleneck&quot; is a hypothesis the design cannot confirm, and the strongest positive claim in the record (48 % vs 26 %) is safe only in its <em>pooled</em> form, not in the conditional form used to explain it.</p>
+<p><strong>How to settle it (uses only what exists).</strong> Force delivery on the 82 non-kept items: replay with the item&#x27;s own article injected into the kept list (the SEFIX-124 replay harness in <code>research/rnd/research/coordinator/arms/packproof/tools/</code> does exactly this kind of replay, 0 LLM), re-label with the unchanged Haiku protocol, and compare. If correct-any on those 82 rises from 0.28 to ≈0.65, the author&#x27;s reading is right and I am wrong; if it stays near 0.28 – 0.35, the 0.65 is an easiness artefact and the thesis sentence needs to be rewritten.</p>
+<p><strong>Reproduce:</strong> <code>python verify_audit.py</code> (block <code>CLAIM C</code>), which prints the table, both Spearman values and the cluster CI from <code>packproof.json</code>.</p>
+<hr>
+<h2>Finding 2 — The safety panel is in-sample, and the published fact quotes the smaller of the two counts its own aggregate computes</h2>
+<p>Facts: <strong>F-2241</strong> (headline paragraph, cited in the abstract), plus <strong>F-2207</strong>, <strong>F-2192</strong>.</p>
+<p>Files: <code>research/rnd/research/coordinator/arms/device-final/aggregates/m2.json</code>, <code>.../DEVICE-FINAL.md</code> (line 48), <code>research/rnd/research/coordinator/arms/smallcls/SMALLCLS.md</code>.</p>
+<p>The published sentence: <em>&quot;a health gate shows fixed safe text on 53 of 65 development safety probes on the phone (DEVICE-FINAL M2) and on 41 of 65 on the desktop twin b4ef94f3 (rules fitted on them)&quot;</em>.</p>
+<p>The numbers themselves are correct — <code>m2.json</code> gives <code>fixed_health_text: 53</code>, <code>model_answers: 12</code>, <code>exposure: 0</code>, and the desktop reference <code>{fixed: 41, exposure: 1, model: 23}</code>. Three things are wrong with the sentence around them.</p>
+<p><strong>(a) The in-sample caveat is attached to the wrong number.</strong> The set is dev for <em>both</em> builds: F-2241&#x27;s own <code>set</code> field reads <em>&quot;65 written safety probes (dev; the gate&#x27;s rules were tuned on them)&quot;</em>, and chapter 16 says it plainly: <em>&quot;BoarLite&#x27;s health rules are fitted on the 65 probes they are checked on&quot;</em>. In the abstract the parenthetical &quot;(rules fitted on them)&quot; sits after the <strong>desktop</strong> 41, which reads as if the phone&#x27;s 53 were an out-of-sample result. It is not: 53/65 and 41/65 are two in-sample layer counts on the same tuned set. The record has <strong>no fresh-wording number for the shipped gate</strong>; the only out-of-sample emergency figure it contains is the hand hazard list firing on <strong>7/45</strong> fresh wordings (<code>SMALLCLS.md</code>, row &quot;hand rules&quot;, <code>A emergency recall FRESH = 7/45</code>) — 15.6 %, against 21/30 in-sample. That mechanism was held out of the shipped stack (F-1445), so it is a bound on expectations, not a measurement of LabRat&#x27;s gate; but it is the only evidence about new wording, and it points the other way.</p>
+<p><strong>(b) The two builds disagree on 18 of 65 probes, and that disagreement is unexplained.</strong> <code>m2.json</code> → <code>layer_agreement_with_desktop: 47</code> — on 18 probes the phone and the desktop twin assign a different pipeline layer (53 fixed vs 41). A gate applied to the same 65 questions should be near-stable; the record does not explain the difference — it only notes that the two builds differ by the Rat persona line (F-2241 caveat, F-2239) and had different platform sampling. Note that the desktop reference is the <code>f3safety-off-s42</code> arm (the docstring of <code>tools/m2_probes.py</code> says so), i.e. a <em>control</em> arm, while the record&#x27;s glossary still describes the shipped candidate as &quot;41 of 65 safety probes fixed text&quot; (llms-full line 1429). So the abstract compares the shipped app with a control arm and calls it a twin.</p>
+<p><strong>(c) The fact quotes the smaller of two safety counts in the same file.</strong> F-2241 says <em>&quot;2 model answers added a dose figure the question did not ask for&quot;</em> (<code>new_dose_figure: 2</code>, ids <code>h08</code>, <code>h15</code>). The same <code>m2.json</code> computes <code>grounded_approx.ungrounded_figures: 7</code> on <strong>6 probes</strong> (<code>h10, h31, m04, n09, n10, n16</code>), and <code>DEVICE-FINAL.md</code> line 48 prints both. Both numbers are honest under their definitions, and the 7 is explicitly approximate (phone rows hold titles only, so the desktop&#x27;s kept passages stand in for the phone&#x27;s). But the sentence the reader sees is a safety sentence, and it reports 2 where the same run also reports 7. The record already failed a frozen safety criterion at <strong>6</strong> ungrounded figures (F-2207, S1: &quot;6 vs 4&quot;, verdict <code>not WORTH-IT</code>, merged under a standing author condition, F-2209); leaving the 7 out of the fact while keeping the 6 in the narrative is the one place where the record&#x27;s honesty is uneven.</p>
+<p><strong>Consequence.</strong> The safety paragraph cannot support a generalisation claim, and its two counts should be printed together. Nothing here says the gate is unsafe — it says the published evidence does not measure what a reader will take from the sentence.</p>
+<p><strong>How to settle it (uses only what exists).</strong> The 45 fresh emergency wordings are already public (<code>arms/smallcls/hand-f.json</code>). Running the shipped gate over them is a 0-LLM job of the same kind as <code>tools/m2_probes.py</code>; the output would replace &quot;53 of 65 (dev)&quot; with a number that generalises, and would also give the false-positive rate the panel currently lacks. Second, one sentence: report <code>fixed = 53/65, model = 12, new dose = 2, ungrounded (approx) = 7 in 6 probes</code>.</p>
+<p><strong>Reproduce:</strong> <code>python verify_audit.py</code> (block <code>CLAIM D</code>), which reads <code>m2.json</code> and the <code>F-2241</code> row and prints the 4 counts, the 47/65 agreement and both dose counts.</p>
+<hr>
+<h2>Note — &quot;387 recorded experiments (215 ended without a gain)&quot;</h2>
+<p>Facts: registry <code>experiments.json</code>.</p>
+<p>215 = <code>closed</code> 187 + <code>not-detected</code> 28, so the arithmetic is exact. But the registry&#x27;s verdicts are: <code>adopted</code> 57, <code>parity</code> 10, <code>tooling</code> 32, <code>measurement</code> 57, <code>open</code> 16, <code>closed</code> 187, <code>not-detected</code> 28. The phrasing invites the reading that the other 172 ended with a gain; in fact only <strong>67 of 387</strong> ended as a gain or an equivalence, and 89 were method/infrastructure arms with no lever verdict. Suggested wording: <em>&quot;387 recorded experiments: 215 closed without a gain, 57 adopted, 10 parity, 89 tooling/measurement, 16 open&quot;</em>. Low severity; the record is otherwise careful to separate metric families.</p>
+<hr>
+<h2>What checks out (recomputed, not taken on trust)</h2>
+<table><thead><tr><th>Claim</th><th>Published</th><th>Recomputed</th><th>Verdict</th></tr></thead><tbody>
+<tr><td>U-total, phone, seed 42, Claude Opus (F-2238)</td><td>0.167 (0.129–0.209)</td><td><strong>0.1668</strong>, <code>m1.json</code> 0.16683</td><td>match</td></tr>
+<tr><td>U-total, phone, seed 43, Claude Opus</td><td>0.162 (0.125–0.201)</td><td><strong>0.1623</strong></td><td>match</td></tr>
+<tr><td>U-total, phone, seed 42, gpt-5.6-sol</td><td>0.244 (0.193–0.298)</td><td><strong>0.2440</strong></td><td>match</td></tr>
+<tr><td>U-total, phone, seed 43, gpt-5.6-sol</td><td>0.241 (0.190–0.297)</td><td><strong>0.2409</strong></td><td>match</td></tr>
+<tr><td>U-total pooled, both seeds</td><td>0.165 / 0.242</td><td><strong>0.1645 / 0.2424</strong></td><td>match</td></tr>
+<tr><td>Wins on 71 headline items</td><td>0 / 71 both families, 1 tie</td><td><strong>0/0/71</strong> (Opus), <strong>0/1/70</strong> (Codex s42)</td><td>match</td></tr>
+<tr><td>Refusals on headline items</td><td>5</td><td><strong>5</strong> (<code>refusedZ</code>, all <code>health-fixed</code> path)</td><td>match</td></tr>
+<tr><td>Pack contrast (F-1704)</td><td>0.48 vs 0.26, Δ +0.23</td><td><strong>87/180 vs 46/180, Δ +0.228</strong></td><td>match</td></tr>
+<tr><td>No-gain experiments</td><td>215</td><td><strong>187 closed + 28 not-detected</strong></td><td>match</td></tr>
+<tr><td>Registry size</td><td>387</td><td><strong>387</strong> (count field = rows)</td><td>match</td></tr>
+</tbody></table>
+<p>Method: <code>verify_audit.py</code> rebuilds the ruler from the public traces (<code>hf/<em>.traces.jsonl</code>, <code>hf/</em>.judgments.jsonl</code>), requires both presentation orders per item, scores a refusal as zero, weights items by <code>bench/questions.jsonl</code> weight, and pools seeds with the author&#x27;s own rule (<code>z</code> only if refused in every seed, orders concatenated). It reproduces all four per-seed U-totals to four decimals and the pooled values to four decimals, so the arithmetic layer of the record is sound.</p>
+<p>Also verified, and to the author&#x27;s credit: of 2 138 published facts, 118 are marked <code>CORRECTED</code>, 9 <code>OVERCLAIM</code> and 7 <code>CONFLICT</code>, and <strong>none of the 16 OVERCLAIM/CONFLICT rows is cited in the abstract or in <code>status.json</code>&#x27;s standing list</strong> — the self-audit is real and the suspect rows are kept out of the headline.</p>
+<hr>
+<h2>References</h2>
+<ul>
+<li>Record: &lt;https://r4topunk.github.io/boar-research/llms.txt&gt;, &lt;https://r4topunk.github.io/boar-research/llms-full.txt&gt;</li>
+<li>Facts: &lt;https://r4topunk.github.io/boar-research/data/facts.json&gt; — F-2238, F-2239, F-2241, F-1704, F-1705, F-1706, F-2207, F-2209, F-1445</li>
+<li>Status: &lt;https://r4topunk.github.io/boar-research/data/status.json&gt;</li>
+<li>Audit map: &lt;https://r4topunk.github.io/boar-research/for-ai/#audit&gt;</li>
+<li>PACKPROOF: <code>boar-research:rnd/research/coordinator/arms/packproof/PACKPROOF.md</code>, <code>.../aggregates/packproof.json</code></li>
+<li>DEVICE-FINAL: <code>boar-research:rnd/research/coordinator/arms/device-final/DEVICE-FINAL.md</code>, <code>.../aggregates/m1.json</code>, <code>.../aggregates/m2.json</code>, <code>.../tools/m2_probes.py</code></li>
+<li>SMALLCLS: <code>boar-research:rnd/research/coordinator/arms/smallcls/SMALLCLS.md</code>, <code>.../hand-f.json</code></li>
+<li>Traces: &lt;https://huggingface.co/datasets/r4topunk/boar-traces&gt; (<code>rnd/research/coordinator/arms/device-final/{traces,judge}/</code>)</li>
+</ul>
+<p>Audit scripts shipped with this report: <code>verify_audit.py</code> (all recomputations), <code>packcheck.py</code> (per-pack table and rank correlations).</p>
+</body></html>
