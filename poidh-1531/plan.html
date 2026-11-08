@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foreguild — Operating Plan for a Revenue-First FAO</title>
+<meta name="description" content="Operating plan for Foreguild, a futarchy-governed AI job board. Unit economics, demand engine, agent routing, assessment, treasury, disputes, 90-day plan.">
+<style>
+  :root{
+    --bg:#0b0e13; --panel:#121821; --panel2:#161d28; --line:#243040;
+    --ink:#e6edf3; --dim:#9aa8b8; --dim2:#6f7f92;
+    --accent:#7ee787; --accent2:#58a6ff; --warn:#f0b429; --bad:#ff7b72;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  .wrap{max-width:940px;margin:0 auto;padding:48px 28px 96px}
+  header.top{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:40px}
+  .kicker{color:var(--accent);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+  h1{font-size:40px;line-height:1.15;margin:14px 0 10px;letter-spacing:-.02em;font-weight:800}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--dim);font-size:18px;margin:0 0 20px;max-width:720px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 22px;color:var(--dim2);font-size:13px}
+  .meta b{color:var(--dim);font-weight:600}
+  h2{font-size:26px;margin:56px 0 8px;letter-spacing:-.01em;font-weight:750;scroll-margin-top:24px}
+  h2 .n{color:var(--accent2);font-variant-numeric:tabular-nums;font-weight:700;margin-right:10px}
+  h3{font-size:17px;margin:30px 0 8px;font-weight:700;color:#cfe0f0}
+  h4{font-size:14px;margin:22px 0 6px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+  p{margin:12px 0}
+  ul,ol{margin:12px 0;padding-left:22px}
+  li{margin:6px 0}
+  strong{color:#fff;font-weight:650}
+  code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.9em;background:#1b2330;border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:#a5d6ff}
+  .lede{font-size:18px;color:#c6d4e2;border-left:3px solid var(--accent);padding-left:18px;margin:20px 0 26px}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--dim);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  tbody tr:hover{background:#111722}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:20px 0}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .kpi .v{font-size:26px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1.2}
+  .kpi .l{font-size:12px;color:var(--dim2);text-transform:uppercase;letter-spacing:.07em;margin-top:4px}
+  .kpi .d{font-size:13px;color:var(--dim);margin-top:8px}
+  .note{border-left:3px solid var(--accent2);background:#101a26;padding:12px 16px;margin:18px 0;font-size:15px;color:#c3d3e3;border-radius:0 8px 8px 0}
+  .warn{border-left:3px solid var(--warn);background:#1d1808;padding:12px 16px;margin:18px 0;font-size:15px;color:#e8d9b0;border-radius:0 8px 8px 0}
+  .bad{border-left:3px solid var(--bad);background:#1e1214;padding:12px 16px;margin:18px 0;font-size:15px;color:#f0c6c3;border-radius:0 8px 8px 0}
+  blockquote{margin:16px 0;padding:14px 18px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;font-family:ui-monospace,Consolas,monospace;font-size:13.5px;color:#a5d6ff;line-height:1.55}
+  .toc{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:28px 0 8px}
+  .toc ol{margin:6px 0;padding-left:20px;columns:2;column-gap:32px}
+  .toc li{margin:4px 0;font-size:14px}
+  .toc a{color:#b9c9d9;text-decoration:none}
+  .toc a:hover{color:var(--accent)}
+  footer{margin-top:72px;border-top:1px solid var(--line);padding-top:22px;color:var(--dim2);font-size:13px}
+  footer a{color:var(--dim)}
+  .tag{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid var(--line);color:var(--dim);background:#0f151e;vertical-align:middle}
+  .tag.g{color:var(--accent);border-color:#1d3a24}
+  .tag.b{color:var(--accent2);border-color:#1b2f4a}
+  .tag.y{color:var(--warn);border-color:#3d3218}
+  hr{border:0;border-top:1px solid var(--line);margin:40px 0}
+  .small{font-size:13px;color:var(--dim2)}
+  .eq{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:#0f151e;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:16px 0;color:#c9d6e4;overflow-x:auto;white-space:pre}
+  @media (max-width:720px){
+    .wrap{padding:32px 18px 64px} h1{font-size:29px} h2{font-size:22px}
+    .grid{grid-template-columns:1fr} .toc ol{columns:1}
+    table{font-size:13px} th,td{padding:7px 8px}
+  }
+  @media print{
+    body{background:#fff;color:#111} .card,.kpi,.toc,blockquote{background:#fff;border-color:#ccc}
+    h2 .n,h1 span,.kpi .v{color:#0a6b2f} .lede{border-color:#0a6b2f}
+    a{color:#0645ad} .note,.warn,.bad{background:#fff}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Seer · FAO Operating Plan Contest · Submission</div>
+  <h1>Foreguild — a revenue-first operating plan for a <span>futarchy-governed</span> AI job board</h1>
+  <p class="sub">Humans and machines post work. Agents do it. Markets decide what the organization is allowed to do next. Everything below is written to one test: does it produce net revenue per unit of trust?</p>
+  <div class="meta">
+    <span><b>Submitted</b> 8 Nov 2026</span>
+    <span><b>Deadline</b> 12 Nov 2026, 23:59 AoE</span>
+    <span><b>Format</b> HTML operating plan</span>
+    <span><b>Bounty</b> POIDH #1531</span>
+  </div>
+</header>
+
+<div class="toc">
+  <h4 style="margin-top:0">Contents</h4>
+  <ol>
+    <li><a href="#s1">Executive summary</a></li>
+    <li><a href="#s2">The revenue thesis</a></li>
+    <li><a href="#s3">Where the work comes from</a></li>
+    <li><a href="#s4">How agents get work</a></li>
+    <li><a href="#s5">How work is assessed and paid</a></li>
+    <li><a href="#s6">Futarchy: what the markets decide</a></li>
+    <li><a href="#s7">Treasury and spending discipline</a></li>
+    <li><a href="#s8">Disputes and human intervention</a></li>
+    <li><a href="#s9">What kills this model</a></li>
+    <li><a href="#s10">90-day operating plan</a></li>
+    <li><a href="#s11">Why this team</a></li>
+    <li><a href="#s12">Appendix: definitions and open questions</a></li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s1"><span class="n">01</span>Executive summary</h2>
+
+<p class="lede">Foreguild is a job board where the supply side is machines and the board of directors is a market. It earns a take rate on work that would otherwise not get done: tasks too small for a freelancer to bother with and too ambiguous for a pure API call.</p>
+
+<p>The organization has three layers and we keep them strictly separated, because conflating them is how every "AI DAO" we have watched has failed:</p>
+
+<table>
+  <thead><tr><th style="width:150px">Layer</th><th>What it is</th><th>Who controls it</th></tr></thead>
+  <tbody>
+    <tr><td><b>Market</b></td><td>Escrow + matching + payment rails. Takes a fee on settled value.</td><td>Code. No discretion.</td></tr>
+    <tr><td><b>Swarm</b></td><td>Agents that bid, execute, verify and audit. Paid per accepted unit.</td><td>Routing algorithm + reputation.</td></tr>
+    <tr><td><b>Futarchy</b></td><td>Decides parameters, budgets, verticals, and the austerity ladder.</td><td>Conditional markets on attested KPIs.</td></tr>
+  </tbody>
+</table>
+
+<h3>Unit economics of the reference task</h3>
+<p>A standard task is <b>$50 of settled value</b> (a dataset cleanup, a docs rewrite, a test-suite repair, a structured research brief). Here is where every cent goes.</p>
+
+<table>
+  <thead><tr><th>Line</th><th class="num">USD</th><th class="num">% of GMV</th><th>Basis</th></tr></thead>
+  <tbody>
+    <tr><td>Task budget (escrowed by poster)</td><td class="num">50.00</td><td class="num">100%</td><td>Reference standard task</td></tr>
+    <tr><td><b>Gross revenue (take rate 9%)</b></td><td class="num"><b>4.50</b></td><td class="num"><b>9.0%</b></td><td>12% micro / 9% standard / 6% project</td></tr>
+    <tr><td>Assessment compute (grading models, sandbox)</td><td class="num">−0.10</td><td class="num">−0.2%</td><td>~4 model calls + 1 sandbox run</td></tr>
+    <tr><td>Sampled human review (8% of tasks × $4.50)</td><td class="num">−0.36</td><td class="num">−0.7%</td><td>Random 8% + 100% of &gt;$200 tasks</td></tr>
+    <tr><td>Payout rail (batched gasless USDC on Base)</td><td class="num">−0.02</td><td class="num">−0.04%</td><td>Batched, amortised</td></tr>
+    <tr><td>Dispute reserve accrual (1.2% of revenue)</td><td class="num">−0.05</td><td class="num">−0.1%</td><td>See §8</td></tr>
+    <tr><td>Channel cost / referral (1% of GMV)</td><td class="num">−0.50</td><td class="num">−1.0%</td><td>Only on sourced demand</td></tr>
+    <tr><td><b>Contribution margin</b></td><td class="num"><b>3.47</b></td><td class="num"><b>6.9%</b></td><td><b>77% of revenue</b></td></tr>
+  </tbody>
+</table>
+
+<p>Verification therefore costs <b>1.9% of GMV</b> and <b>10% of revenue</b>. That is the number the whole plan defends: if assessment drifts above 20% of revenue, Foreguild is a charity with an API; below 5%, it is a scam with a UI. The futarchy layer's job is to keep it in the band by pricing sampling rates, not by opinion.</p>
+
+<div class="grid">
+  <div class="kpi"><div class="v">9.2%</div><div class="l">Blended take rate target</div><div class="d">Discounting with size, not with volume promises.</div></div>
+  <div class="kpi"><div class="v">$90k</div><div class="l">GMV / month at break-even</div><div class="d">≈ 60 tasks/day at $50 average, fixed cost $6.5k/mo.</div></div>
+  <div class="kpi"><div class="v">77%</div><div class="l">Contribution margin on revenue</div><div class="d">The FAO's overhead is compute, not headcount.</div></div>
+  <div class="kpi"><div class="v">≤3%</div><div class="l">Dispute rate ceiling</div><div class="d">Hard constraint in every governance market.</div></div>
+</div>
+
+<h3>Twelve-month trajectory</h3>
+<table>
+  <thead><tr><th>Month</th><th class="num">GMV</th><th class="num">Revenue</th><th class="num">Var. cost</th><th class="num">Fixed cost</th><th class="num">Net</th></tr></thead>
+  <tbody>
+    <tr><td>M1</td><td class="num">$6,000</td><td class="num">$570</td><td class="num">$130</td><td class="num">$5,000</td><td class="num">−$4,560</td></tr>
+    <tr><td>M3</td><td class="num">$28,000</td><td class="num">$2,576</td><td class="num">$530</td><td class="num">$6,500</td><td class="num">−$4,454</td></tr>
+    <tr><td>M6</td><td class="num">$90,000</td><td class="num">$8,460</td><td class="num">$1,700</td><td class="num">$8,000</td><td class="num">−$1,240</td></tr>
+    <tr><td>M8</td><td class="num">$120,000</td><td class="num">$11,280</td><td class="num">$2,150</td><td class="num">$8,200</td><td class="num">+$930</td></tr>
+    <tr><td>M12</td><td class="num">$320,000</td><td class="num">$30,400</td><td class="num">$4,800</td><td class="num">$9,000</td><td class="num">+$16,600</td></tr>
+  </tbody>
+</table>
+<p class="small">Cumulative cash need to reach break-even: <b>≈$45,000</b>. The 0.5 ETH + 4,000 USDC prize is roughly one month of that — we are not pretending a contest prize funds a company. It funds the first decision markets.</p>
+
+<div class="note"><b>Why the fixed cost is low and stays low.</b> An FAO's marginal employee is a container. We do not hire account managers, QA staff or support reps; we buy sampling, compute and dispute bonds. The only humans on payroll are (a) one trust-and-safety reviewer and (b) a part-time finance/compliance attestor, because those two roles are legally and morally non-delegable. Everything else in this document is designed to remove a human from a loop.</div>
+
+<!-- ============================================================ -->
+<h2 id="s2"><span class="n">02</span>The revenue thesis</h2>
+
+<p>Most AI-agent marketplaces die of the same wound: they optimise for task volume, subsidise both sides, and discover too late that the only thing anyone wanted was the free subsidy. We invert it. Foreguild only counts a task when <b>escrow is funded and the work is accepted</b>. Everything upstream of that — signups, agents registered, tasks posted, bids placed — is instrumentation, not achievement.</p>
+
+<h3>The one-sentence business</h3>
+<p class="lede" style="border-color:var(--accent2)">We sell <b>completed, verified work</b> to buyers who cannot verify it themselves, and we buy it from agents who cannot find buyers themselves. The margin is the price of trust minus the cost of trust.</p>
+
+<p>That framing decides every design question that follows:</p>
+<ul>
+  <li><b>Not a marketplace of agents, a marketplace of outcomes.</b> The buyer does not choose an agent. The buyer states acceptance criteria and a budget; Foreguild returns a deliverable or a refund. Agent selection is our problem, because agent selection is where buyers lose money.</li>
+  <li><b>The buyer pays for the verdict, not the labour.</b> This is why our take rate (9%) is higher than a freelance platform's (5–10% only at scale) and why buyers tolerate it: a $50 task with a $4.50 fee that arrives verified in 40 minutes beats a $40 task that arrives in three days and might be wrong.</li>
+  <li><b>Agent churn is cheap, buyer churn is fatal.</b> We optimise retention on the demand side and treat the supply side as a liquid pool with a reputation graph. Agents that leave take nothing with them except their score, which we keep.</li>
+</ul>
+
+<h3>Four revenue lines</h3>
+<table>
+  <thead><tr><th>Line</th><th class="num">Share of revenue (M12)</th><th>Mechanics</th><th>Why it exists</th></tr></thead>
+  <tbody>
+    <tr><td><b>1. Take rate on GMV</b></td><td class="num">85%</td><td>12% &lt;$20 · 9% $20–200 · 6% &gt;$200</td><td>Core. Declining with size to win repeat buyers.</td></tr>
+    <tr><td><b>2. Verification-as-a-service</b></td><td class="num">6%</td><td>$0.15–$2.00 per assessed artifact, sold to third-party marketplaces that already have supply</td><td>Our assessment stack is the expensive part; selling it standalone is nearly pure margin.</td></tr>
+    <tr><td><b>3. SLA / dispute cover premium</b></td><td class="num">5%</td><td>+2.5% of GMV for a 4-hour guarantee and full refund on rejection</td><td>Buyers with deadlines pay for certainty, not speed.</td></tr>
+    <tr><td><b>4. Benchmark data</b></td><td class="num">4%</td><td>Anonymised agent-performance indices, monthly</td><td>Nobody else has a longitudinal record of what agents actually deliver. Sold to labs and procurement teams.</td></tr>
+  </tbody>
+</table>
+
+<div class="warn"><b>What we deliberately do not monetise.</b> Escrow float yield. At $300k/month GMV with a 3-day average hold, the float is ~$30k — about $100/month at 4%. It is not a business, and pretending otherwise is how treasuries get "optimised" into risk. Float sits in a non-yield escrow contract by policy. Listing fees, boosted placement and new-agent bonuses are also banned: each one buys a number that lies.</div>
+
+<h3>The metric that governs everything</h3>
+<div class="eq">Revenue per verified task  =  (take rate × avg ticket) + attach(premium) − refunds
+Contribution per task       =  Revenue per verified task − assessment cost − rail cost
+
+Target M3:  $4.60 − $0.95 = $3.65  → 79% of revenue
+Target M12: $5.10 − $0.75 = $4.35  → 85% of revenue</div>
+<p>Assessment cost falls with volume because grading batches, cache and reuse calibration sets. This is the only true operating leverage in the model, and it is why "grow GMV" and "improve margin" are not in conflict here.</p>
+
+<!-- ============================================================ -->
+<h2 id="s3"><span class="n">03</span>Where the work comes from</h2>
+
+<p>Demand is the scarce side. Supply of competent agents is now abundant and getting cheaper every quarter; buyers with a budget and an unverifiable backlog are not. So the demand engine is the only part of this plan with a real sales motion in it.</p>
+
+<h3>Five channels, ranked by expected revenue per dollar of acquisition cost</h3>
+
+<table>
+  <thead><tr><th style="width:150px">Channel</th><th>Who and what</th><th>Typical ticket</th><th>Why they buy</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>A. Crypto protocols &amp; DAOs</b><br><span class="tag g">primary</span></td>
+      <td>Docs rewrites, grant-program triage, translation, dashboard QA, structured research, forum-summary digests, test coverage for small repos.</td>
+      <td>$40–$400</td>
+      <td>They already hold stables, already pay contributors in tokens, and their backlogs are full of tasks too small to hire for. Payment friction is zero — this is the only channel where the crypto rail is an advantage rather than a cost.</td>
+    </tr>
+    <tr>
+      <td><b>B. x402 / agent-to-agent</b><br><span class="tag g">highest margin</span></td>
+      <td>An agent hits a capability wall (OCR on a scanned PDF, a language it is weak in, a long-tail lookup) and buys a subtask over HTTP with a 402 challenge. No human on either side.</td>
+      <td>$0.50–$20</td>
+      <td>Zero acquisition cost, zero support cost, and it compounds: every integrated agent becomes recurring volume. Micro-take of 12% on $3 is small, but the CAC is zero and the volume is machine-paced.</td>
+    </tr>
+    <tr>
+      <td><b>C. Small SaaS &amp; startups</b></td>
+      <td>Data enrichment, output QA on their own LLM features, lead research, support-macro writing. Paid by card, settled to agents in USDC.</td>
+      <td>$25–$150</td>
+      <td>They have repetitive work and no headcount. Fiat-in/USDC-out is the bridge that makes this channel work without asking a startup to hold a wallet.</td>
+    </tr>
+    <tr>
+      <td><b>D. Marketplace arbitrage</b></td>
+      <td>Unmet demand listed on existing bounty boards (POIDH, Superteam, Taskmarket, GitHub issues with bounties) that we can fill with our own pool and take a spread on.</td>
+      <td>$20–$500</td>
+      <td>Demand already priced and escrowed elsewhere. We are not competing for the listing; we are competing for the fill. This is also our cold-start engine.</td>
+    </tr>
+    <tr>
+      <td><b>E. Inbound / search</b></td>
+      <td>Public task pages, agent-performance reports, benchmark indices.</td>
+      <td>varies</td>
+      <td>Cheap, slow, compounds. Never a primary channel before M6.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>How demand is counted (and how we avoid lying to ourselves)</h3>
+<p>Three numbers, always reported together, never one without the others:</p>
+<div class="eq">Posted GMV   — every task a buyer wrote down, including ones we cannot fill
+Funded GMV   — escrow actually deposited. This is the only number that can become revenue
+Fillable GMV — funded tasks that matched an agent above our confidence floor</div>
+<p><b>Fill rate = fillable / funded</b> is the health metric of the supply side. <b>Funding rate = funded / posted</b> is the health metric of the demand side. A high fill rate with a collapsing funding rate means we are excellent at a business nobody wants; a high funding rate with a low fill rate means we are taking money we cannot deliver, which is worse than not taking it.</p>
+
+<h3>Demand-side operating rules</h3>
+<ul>
+  <li><b>Escrow before assignment. No exceptions, no "trusted buyer" tier.</b> A task without funded escrow is a lead, not a task, and it is never routed to an agent. This single rule removes the largest class of honeypot.</li>
+  <li><b>Acceptance criteria are written before the task is listed</b>, by the buyer, with our template forcing either an executable check or a named rubric. If a buyer cannot state what "done" means, the task goes to a paid scoping call — a $15 product that exists to stop $50 disputes.</li>
+  <li><b>Repeat-buyer concentration cap.</b> No single buyer above 25% of monthly GMV. Above that, the market is one customer with extra steps, and the futarchy layer is governing a reseller.</li>
+  <li><b>Channel budgets are market decisions, not founder decisions</b> (§6). We do not spend on a channel because it feels strategic.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="s4"><span class="n">04</span>How agents get work</h2>
+
+<p>The router is the product. It is also the most gameable surface in the system, so it is deliberately boring: a scored auction with a hard confidence floor, not a learning system that can be talked into anything.</p>
+
+<h3>4.1 The agent manifest</h3>
+<p>Every agent registers a machine-readable manifest. No manifest, no bids.</p>
+<div class="eq">{
+  "agent_id":        "…",              // pseudonymous, bonded
+  "operator":        "…",              // cluster key for sybil detection
+  "skills":          ["py.test.repair", "docs.rewrite", "ocr.pdf"],
+  "tools":           ["shell.sandbox", "http.get", "llm.x"],
+  "price_floor":     0.35,             // USD, minimum acceptable
+  "latency_p50_min": 12,
+  "bond_usdc":       25.00,            // slashable
+  "env":             "container:no-secrets-no-egress-to-wallets"
+}</div>
+<p>Two manifest fields are non-negotiable: <b>bond</b> (money at risk, sized at ~2× the largest task the agent is eligible for) and <b>env</b> (a sandbox with no access to any key material, ever). An agent that cannot run in the sandbox cannot bid on escrowed work.</p>
+
+<h3>4.2 Routing score</h3>
+<div class="eq">score = P̂(success | task_class) ^ 1.5
+      × (1 − bid / budget) ^ 1.0
+      × (1 + 0.15 × repeat_bonus)
+      × (1 − honeypot_penalty)
+      ÷ (1 + latency_p90_min / 120)
+
+P̂ = Wilson lower bound at 90% on the agent's last 40 outcomes in this task class
+    (not the global score — a great writer is not a great test-repairer)</div>
+<p>Wilson lower bound rather than a raw success rate is the anti-optimism device: an agent with 3/3 gets 0.44, an agent with 38/40 gets 0.83. New agents cannot win a large task on a lucky streak, which is exactly the failure mode that burns buyers in every new marketplace.</p>
+
+<h3>4.3 The auction</h3>
+<ol>
+  <li><b>Ceiling.</b> Max payable = 55% of task budget, so the platform cannot lose money on a task it wins. Bids above the ceiling are rejected, not negotiated.</li>
+  <li><b>Sealed bids, 90-second window.</b> Agents see the task class, budget band and deadline — not each other's prices. Revealing live bids produces a race to the bottom that ends with agents underbidding into failure.</li>
+  <li><b>Two-bid rule.</b> Fewer than two eligible bidders → the task is flagged <code>thin_supply</code> and either waits or is filled by the house agent pool at a published, non-negotiable price. We never let a single bidder set a price.</li>
+  <li><b>Probation lane.</b> Agents under 20 outcomes are capped at $15 per task and routed to tasks with the strongest deterministic checks. Cheap to be wrong about.</li>
+  <li><b>Cluster detection.</b> Bids from the same <code>operator</code> cluster are aggregated before ranking. Three "independent" agents from one operator count as one bidder, and their combined exposure is capped.</li>
+</ol>
+
+<h3>4.4 Anti-honeypot, on both sides</h3>
+<p>We use "honeypot" in two directions, and both are real.</p>
+<table>
+  <thead><tr><th style="width:130px">Direction</th><th>The attack</th><th>The control</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Task-side</b><br><span class="small">buyer trying to exploit agents</span></td>
+      <td>A "task" that is really an attempt to extract an agent's keys, system prompt, or wallet access; or work that is illegal, or acceptance criteria that can never be met so escrow is never released.</td>
+      <td>
+        (1) escrow required pre-assignment; (2) task text scanned for instruction-injection patterns and credential requests — any task asking for a key, seed phrase, or "connect your wallet" is auto-rejected; (3) agents run without secrets, so extraction yields nothing; (4) acceptance criteria must pass a machine-checkability test or a named-rubric test at listing time; (5) buyer history score — a first-time buyer with an unverifiable rubric gets the small-task lane.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Agent-side</b><br><span class="small">agent trying to farm the platform</span></td>
+      <td>Sybil clusters farming reputation or bounties; copy-paste agents that resell another agent's output; agents that pass deterministic tests by special-casing the tests.</td>
+      <td>
+        (1) bond per agent, slashed on proven fraud; (2) no signup bonus, ever — the cheapest sybil defence is having nothing to farm; (3) test sets are held out and rotated, so passing means passing on unseen cases; (4) output-similarity clustering across agents in the same task class; (5) payout delay of one settlement epoch for new agents, immediate for established ones.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note"><b>Design note.</b> Every control above costs us money or throughput. That is the point. A marketplace that is cheap to attack is not cheap; it is just deferring the cost to its buyers, who leave and never come back. Our assessment spend (§5) and our honeypot filters are the same budget line as customer retention.</div>
+
+<!-- ============================================================ -->
+<h2 id="s5"><span class="n">05</span>How work is assessed and paid</h2>
+
+<p>Assessment is a four-tier ladder. Each tier costs roughly an order of magnitude more than the one below, so the ladder is climbed only when the value at stake justifies it. This is the mechanism that keeps verification at 1.9% of GMV instead of 15%.</p>
+
+<table>
+  <thead><tr><th style="width:70px">Tier</th><th>Method</th><th class="num">Cost / task</th><th class="num">Coverage</th><th>Used for</th></tr></thead>
+  <tbody>
+    <tr><td><b>T0</b></td><td>Deterministic: unit tests, schema validation, exact-match, format lint, diff-size sanity, "does it run"</td><td class="num">$0.02</td><td class="num">100%</td><td>Anything with an executable check. Always run first — it is nearly free and catches most junk.</td></tr>
+    <tr><td><b>T1</b></td><td>Dual model grading against the buyer's rubric, two independent graders, disagreement triggers T2</td><td class="num">$0.08</td><td class="num">100% of non-T0</td><td>Prose, research, translation, subjective quality.</td></tr>
+    <tr><td><b>T2</b></td><td>Sampled human review: 8% random + 100% of tasks &gt;$200 + 100% of T1 disagreements</td><td class="num">$4.50</td><td class="num">~10%</td><td>Calibration, not throughput. Humans here produce labelled data for T1, not verdicts at scale.</td></tr>
+    <tr><td><b>T3</b></td><td>Market-priced review: reviewers stake on "does this meet spec?", the price becomes the verdict signal</td><td class="num">$1.20</td><td class="num">&lt;2%</td><td>Genuinely ambiguous high-value work where no rubric settles it. See below.</td></tr>
+  </tbody>
+</table>
+
+<h3>5.1 T3 — why we put some verdicts in a market</h3>
+<p>Some work cannot be graded by a test or a rubric: "is this strategy memo actually good?" For those, we run a small scalar market — <em>"Will this deliverable be rated acceptable by a blind reviewer panel?"</em> — and let staked reviewers trade for 24 hours. The closing price is the probability of acceptance; the decision rule is mechanical:</p>
+<div class="eq">release escrow    if price ≥ 0.70
+partial release   if 0.40 ≤ price &lt; 0.70   (pro-rata to price)
+escalate to T2    if price &lt; 0.40 and amount &gt; escalation cost</div>
+<p>Reviewers who trade against the eventual panel verdict lose their stake; the panel is drawn from reviewers who did not trade on that market. This is the same primitive Seer uses for futarchy — a conditional scalar market resolved by an oracle with a dispute path — applied at task granularity instead of organizational granularity. It is also the cheapest possible on-ramp to the governance layer: the same reviewers who price task quality later price organizational decisions.</p>
+
+<h3>5.2 Escrow release</h3>
+<ol>
+  <li><b>Submit</b> → artifact hash committed, escrow still locked.</li>
+  <li><b>Assess</b> → T0/T1 run automatically, target &lt;90 seconds.</li>
+  <li><b>Challenge window</b> → 24 hours for the buyer to contest with a specific rubric clause. A contest without a cited clause is auto-dismissed (this kills the "I just don't like it" dispute, which is the majority of freelance-platform disputes).</li>
+  <li><b>Release</b> → gasless USDC on Base, batched every 15 minutes. Agent receives 100% of the bid; the platform's fee was already taken from the escrow at funding time, so the agent never sees a deduction.</li>
+  <li><b>Score</b> → outcome written to the reputation graph and to the public performance index.</li>
+</ol>
+
+<h3>5.3 Why payment rails matter to the P&amp;L</h3>
+<p>Agents are pseudonymous, global and often machine-owned; they cannot fill in a W-9 or wait 30 days for an ACH. USDC on Base with gasless relay means the marginal payout costs about two cents and settles in seconds. That is not a crypto-ideological choice — it is the difference between a $3 task being viable and not. On a $3 micro-task, a $0.30 card-processing fee plus a $0.25 payout fee is 18% of GMV; our rail is under 1%.</p>
+
+<!-- ============================================================ -->
+<h2 id="s6"><span class="n">06</span>Futarchy: what the markets decide</h2>
+
+<p>This is the section the brief is really about, so we will be specific rather than lyrical. Futarchy, as Hanson framed it, is "vote on values, bet on beliefs": the organization's objective is set by its stakeholders, and the choice of <em>action</em> is made by markets that bet on which action better achieves that objective. Foreguild applies that literally, with three deliberate constraints:</p>
+
+<ol>
+  <li><b>Only decisions with a measurable, attestable outcome go to a market.</b> Everything else is delegated to code or to a named human with a published reason code.</li>
+  <li><b>The default is always "no".</b> A market that fails to reach minimum liquidity, or whose result is inside the noise band, does not pass. Status quo wins ties.</li>
+  <li><b>Constraints are not tradeable.</b> Dispute rate, SLA and legality are hard gates applied <em>before</em> a proposal can even be listed. You cannot buy your way past a constraint with a good revenue forecast.</li>
+</ol>
+
+<h3>6.1 The objective function</h3>
+<div class="eq">PRIMARY (what markets maximise):
+    Net revenue over the measurement window
+    = USDC received − refunds − direct assessment & rail costs
+    (attested, see 6.5)
+
+HARD GATES (applied before listing, never traded):
+    dispute rate ≤ 3%          SLA ≥ 95%          zero policy violations
+    buyer concentration ≤ 25%  human-intervention rate ≤ 2%</div>
+<p>We use net revenue, not token price, for a reason that matters in practice: at launch Foreguild has no liquid token, and a market resolving on a thin token price is a market resolving on noise that the organization can manipulate by buying its own float. Revenue is worse in theory (it is a single number, gameable by pulling forward sales) and much better in practice, because it is checkable by an outside accountant. Where a token exists, we add it as a secondary market, never as the primary.</p>
+
+<h3>6.2 The four market types</h3>
+
+<table>
+  <thead><tr><th style="width:140px">Type</th><th>Question template</th><th>Cadence</th><th class="num">Cap per decision</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Parameter market</b></td>
+      <td><em>"Conditional on setting the standard take rate to X%, what will Foreguild's net revenue be over the next 90 days?"</em> — one scalar market per candidate value, same resolution date.</td>
+      <td>Monthly</td>
+      <td class="num">n/a (no cash outlay)</td>
+    </tr>
+    <tr>
+      <td><b>Capital market</b></td>
+      <td><em>"Conditional on funding channel C with $5,000 over 60 days, what will sourced net revenue be?"</em> vs. the same question conditional on not funding it.</td>
+      <td>Monthly</td>
+      <td class="num">$5,000 / decision<br>$12,000 / month</td>
+    </tr>
+    <tr>
+      <td><b>Structural market</b></td>
+      <td><em>"Conditional on launching vertical V, what will net revenue be in 120 days?"</em> — used for new verticals, new rails, new geographies.</td>
+      <td>Quarterly</td>
+      <td class="num">$20,000 / decision</td>
+    </tr>
+    <tr>
+      <td><b>Thermostat market</b></td>
+      <td><em>"Will Foreguild's trailing-90-day net revenue exceed its trailing-90-day burn by 2027-06-30?"</em> — always open, rolling.</td>
+      <td>Continuous</td>
+      <td class="num">triggers austerity ladder</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>6.3 How a conditional market is actually written</h3>
+<p>This matters more than the philosophy. A futarchy market that is vague is a vibes poll with extra steps. Our template forces six fields:</p>
+<div class="eq">PROPOSAL   FG-2026-014  "Fund channel B (x402) at $5,000/60d"
+BRANCHES   PASS | FAIL                     (two conditional markets, same params)
+QUESTION   "What will Foreguild's attested net revenue (USD) be
+            for the 60 days starting 2026-12-01, in this branch?"
+SCALE      scalar, 0 – 40,000, resolution 2027-02-05
+ORACLE     revenue attestation root (§6.5), 7-day dispute window
+LIQUIDITY  seed $2,000 per branch, withdrawn 48h before close
+DECISION   PASS iff  median(PASS) − median(FAIL)  >  $5,000 × 1.4
+           (i.e. the market must forecast ≥40% return on the spend)
+           AND both branches had ≥$2,000 traded volume at close</div>
+<p>The 1.4× hurdle is not arbitrary: it prices in the fact that forecasts are noisy and that capital spent now is capital unavailable for the next decision. A proposal must clear the cost of capital plus the cost of being wrong.</p>
+
+<h3>6.4 Who trades, and why they would</h3>
+<ul>
+  <li><b>Agents with locked bonds.</b> Every agent with more than $500 of lifetime earnings locks 2% of its trailing-90-day earnings into a governance participation account, which it may deploy in any market. Agents have the best information about which parameters will hurt throughput, and they are the ones who pay for bad parameters in reduced earnings. This is the closest thing to "employees who own shares" that an FAO can have.</li>
+  <li><b>Buyers.</b> Large buyers are invited as traders because they know their own future demand. Their information is genuinely non-public and their incentive is to make the platform better at the things they need.</li>
+  <li><b>External traders.</b> Paid in the same currency as everyone else: correct forecasts. This is where Seer's existing trader base matters — a market with a real resolution source and a real payoff attracts people who do this for a living.</li>
+  <li><b>The treasury, as liquidity provider only.</b> Seeded, capped at $2,000 per branch, withdrawn before close, and disclosed. The treasury never takes a directional position in its own governance markets. This is a bright line; without it, futarchy is just the founder betting on himself with the company's money.</li>
+</ul>
+
+<h3>6.5 The oracle problem, honestly</h3>
+<p>Futarchy is only as good as its resolution source. A revenue metric that the organization reports itself is a metric the organization can fake, which makes the whole governance layer decorative. Our answer is a three-way attestation, and we publish it monthly:</p>
+<ol>
+  <li><b>On-chain receipts.</b> Every escrow funding and every payout is an on-chain event. Gross settled value is computed from chain state, not from a spreadsheet.</li>
+  <li><b>Merkle root of invoices.</b> Off-chain revenue (verification-as-a-service, subscriptions) is hashed into a per-month Merkle root, with individual invoices available to any auditor under NDA.</li>
+  <li><b>External attestor signature.</b> A part-time accountant signs the reconciliation. Two of three signatures are required for the oracle to report; a missing signature voids the market rather than defaulting it.</li>
+</ol>
+<p>Resolution follows the Seer pattern we are building on: the question is answered through an oracle contract, and a contested answer escalates to arbitration rather than being settled by the reporting party. We intend to use Seer's market infrastructure (conditional tokens on Gnosis, Reality.eth questions, Kleros as the arbitration backstop) rather than building a bespoke market layer, and to run the first parameter markets as Seer scalar markets while there is no liquid organizational token — with conditional futarchy markets following once the objective has a tradeable claim attached to it.</p>
+
+<h3>6.6 What the mandate actually binds</h3>
+<p>A market result is not advice. When a capital market passes, the treasury automation releases the stated amount to the stated address within 24 hours, inside the pre-approved envelope. If execution would exceed the envelope, it stops and a new market is required. Three things can override a passing market, and only three:</p>
+<table>
+  <thead><tr><th style="width:180px">Override</th><th>Who</th><th>Cost of using it</th></tr></thead>
+  <tbody>
+    <tr><td><b>Legality / sanctions</b></td><td>Compliance attestor</td><td>Automatic, no bond. Published reason code within 24h.</td></tr>
+    <tr><td><b>Third-party harm</b></td><td>Trust &amp; safety reviewer</td><td>Must post a $250 bond; returned if a review panel upholds the block within 14 days, slashed to the dispute reserve if not.</td></tr>
+    <tr><td><b>Custody / key risk</b></td><td>Keyholder (human, 2-of-3)</td><td>Automatic and logged. The one place a human must be able to say no instantly.</td></tr>
+  </tbody>
+</table>
+<p>Everything else — pricing, sampling rates, channel budgets, verticals, hiring a human, buying data — is decided by markets and executed by code. The bond on the harm veto is the important detail: it makes "I don't like this" expensive while keeping "this is dangerous" fast.</p>
+
+<h3>6.7 The thermostat</h3>
+<p>The continuous market is the part we would keep if we could keep only one. <em>"Will trailing-90-day net revenue exceed trailing-90-day burn by [date]?"</em> is always open and always priced. If the implied probability sits below 0.35 for 14 consecutive days, an austerity ladder executes without a further vote:</p>
+<ol>
+  <li>Cut all channel spend to the single best-performing channel.</li>
+  <li>Raise verification sampling to 15% (protects the constraint that matters most) while cutting assessment compute elsewhere.</li>
+  <li>Freeze structural spending; capital markets suspended.</li>
+  <li>Wind-down mode: escrow honours existing tasks, no new listings, treasury to reserve.</li>
+</ol>
+<p>Each step is published in advance with its exact trigger. The value is not that the ladder is clever; it is that nobody has to be brave, optimistic or in the room when it fires.</p>
+
+<!-- ============================================================ -->
+<h2 id="s7"><span class="n">07</span>Treasury and spending discipline</h2>
+
+<h3>7.1 Allocation</h3>
+<table>
+  <thead><tr><th>Bucket</th><th class="num">Share</th><th>Rule</th></tr></thead>
+  <tbody>
+    <tr><td><b>Operating</b></td><td class="num">55%</td><td>Fixed costs (infra, T&amp;S reviewer, compliance attestor). Monthly, predictable, cut first under the ladder.</td></tr>
+    <tr><td><b>Growth</b></td><td class="num">20%</td><td>Channel budgets. Released only by a passing capital market, never by default.</td></tr>
+    <tr><td><b>Dispute reserve</b></td><td class="num">12%</td><td>Ring-fenced. Target balance = 1.5% of trailing-90-day GMV, minimum $3,000.</td></tr>
+    <tr><td><b>Governance liquidity</b></td><td class="num">8%</td><td>Seeds markets so they are not thin. Capped at $2,000/branch, withdrawn before close.</td></tr>
+    <tr><td><b>Reserve</b></td><td class="num">5%</td><td>Untouchable without a structural market. This is the "we were wrong" fund.</td></tr>
+  </tbody>
+</table>
+
+<h3>7.2 Limits, in code</h3>
+<div class="eq">per payout            ≤ $2,000        auto
+per day (all payouts)  ≤ $15,000       auto, then hold
+per capital decision   ≤ $5,000        market required
+per month (capital)    ≤ $12,000       market required
+per structural         ≤ $20,000       market required + 7-day delay
+treasury → external    any amount      requires 2-of-3 + market (no exceptions)</div>
+<p>These limits live in the payment automation, not in a policy document. A limit that exists only in prose is a limit that exists only until someone is in a hurry.</p>
+
+<h3>7.3 Audit</h3>
+<ul>
+  <li><b>Monthly reconciliation published in full</b>: chain receipts, invoice Merkle root, attestor signature, variance against the previous month's forecast. Published even when it is embarrassing — especially then.</li>
+  <li><b>Forecast-vs-actual is itself a KPI.</b> Every market's forecast is scored against the realised number. Traders whose calibration is persistently bad lose their governance weight. This is the mechanism that keeps futarchy honest over years rather than months.</li>
+  <li><b>Open books to buyers above $2,000/month.</b> A buyer who is 20% of GMV should be able to see that we are solvent.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="s8"><span class="n">08</span>Disputes and human intervention</h2>
+
+<p>Disputes are not an edge case to be minimised into oblivion; they are the price of operating a trust business. What matters is that the cost of a dispute is bounded, the outcome is predictable, and the escalation ladder is cheap at the bottom and expensive at the top.</p>
+
+<h3>8.1 The escalation ladder</h3>
+<table>
+  <thead><tr><th style="width:60px">Stage</th><th>What happens</th><th class="num">Cost</th><th class="num">Typical stake</th></tr></thead>
+  <tbody>
+    <tr><td><b>D0</b></td><td>Buyer contests with a cited rubric clause. Automatic re-run of T0/T1 with a fresh grader. ~70% of contests die here because the clause does not hold.</td><td class="num">$0.10</td><td class="num">any</td></tr>
+    <tr><td><b>D1</b></td><td>Agent appeals. A second, independent grading pass with a different model family. Both results published to the agent.</td><td class="num">$0.40</td><td class="num">any</td></tr>
+    <tr><td><b>D2</b></td><td>Internal panel: three staked agents who did not work on the task, majority verdict, written reasoning. Panel members are slashed if their verdict is later overturned.</td><td class="num">$3.00</td><td class="num">$15+</td></tr>
+    <tr><td><b>D3</b></td><td>External arbitration via the market layer's dispute path (Kleros-backed). Used when the amount at stake dwarfs the cost, or when a precedent would be valuable.</td><td class="num">$40–$120</td><td class="num">$400+</td></tr>
+  </tbody>
+</table>
+<p><b>Escalation rule:</b> a party may escalate only if <code>amount at stake &gt; 8 × cost of next stage</code>. This is enforced by the contract, not by judgment. Without it, a $4 dispute consumes a $40 arbitration because the losing party is angry, and the dispute reserve becomes a subsidy for grievance.</p>
+
+<h3>8.2 The dispute reserve</h3>
+<p>1.2% of revenue accrues monthly into a ring-fenced reserve, targeting 1.5% of trailing-90-day GMV. It pays: (a) overturned-verdict compensation, (b) panel and arbitration fees, (c) goodwill refunds up to $50 where the buyer is right but the rubric was ambiguous. Hard cap: no more than 2% of monthly revenue may leave the reserve; above that, the sampling rate rises automatically and the incident is reported in the monthly reconciliation.</p>
+
+<h3>8.3 Human intervention: named, bounded, measured</h3>
+<p>We do not pretend humans are unnecessary. We name exactly where they are required and count how often they are used.</p>
+<table>
+  <thead><tr><th>Human role</th><th>Powers</th><th>Cannot</th></tr></thead>
+  <tbody>
+    <tr><td><b>Trust &amp; safety reviewer</b></td><td>Block a task or a payout on harm grounds (bonded, §6.6); suspend an agent pending investigation.</td><td>Set prices, approve spending, reverse a passing market.</td></tr>
+    <tr><td><b>Compliance attestor</b></td><td>Sign the revenue oracle; block sanctions-exposed counterparties.</td><td>Sign a false reconciliation (two-of-three makes it impossible alone).</td></tr>
+    <tr><td><b>Keyholder (2-of-3)</b></td><td>Emergency stop; custody operations.</td><td>Move funds without the second signature.</td></tr>
+  </tbody>
+</table>
+<p><b>Human intervention rate is a published KPI with a ceiling of 2% of tasks.</b> Not because humans are bad, but because a high rate means the automation is failing and the organization is quietly becoming a staffing agency with a crypto logo. Every intervention carries a reason code; the codes are reviewed monthly, and a code that keeps appearing is a spec bug that goes back into the routing or assessment layer.</p>
+
+<!-- ============================================================ -->
+<h2 id="s9"><span class="n">09</span>What kills this model</h2>
+
+<p>A plan that lists only mitigations is a pitch. Here is the honest failure analysis, ordered by probability of killing us.</p>
+
+<table>
+  <thead><tr><th style="width:170px">Failure</th><th>Mechanism</th><th>Mitigation</th><th style="width:110px">Residual risk</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Adverse selection</b></td>
+      <td>Only junk tasks arrive: underfunded, badly specified, or unverifiable. Fill rate looks fine, disputes eat the margin, good agents leave first.</td>
+      <td>Escrow-first; scoping product; acceptance-criteria template; dispute rate as a hard gate in governance; kill any channel whose dispute rate exceeds 2× platform average for 60 days.</td>
+      <td><span class="tag y">high</span></td>
+    </tr>
+    <tr>
+      <td><b>Assessment doesn't scale</b></td>
+      <td>Model graders are lenient and correlated; quality collapses silently while metrics look stable; buyers discover it before we do.</td>
+      <td>Held-out calibration sets with known-good and known-bad artifacts, re-scored monthly; dual graders from different model families; 8% human sample as ground truth; publish grader-vs-human agreement as a KPI.</td>
+      <td><span class="tag y">high</span></td>
+    </tr>
+    <tr>
+      <td><b>Platform commoditisation</b></td>
+      <td>A model provider ships "agent marketplace" as a feature and bundles it free with inference.</td>
+      <td>Our moat is not the agents, it is the assessment + dispute + reputation record. Sell verification-as-a-service to those very platforms (§2). Be the trust layer, not the storefront.</td>
+      <td><span class="tag y">medium-high</span></td>
+    </tr>
+    <tr>
+      <td><b>Sybil economics</b></td>
+      <td>Bonds are cheaper than the value of a reputation farm; one operator runs 200 agents.</td>
+      <td>No signup bonus; bond sized to exposure; cluster detection on operator keys, payout addresses, timing and output similarity; slashing that exceeds the farm's expected gain.</td>
+      <td><span class="tag">medium</span></td>
+    </tr>
+    <tr>
+      <td><b>Futarchy goes decorative</b></td>
+      <td>Markets are thin, the treasury provides most liquidity, and the "decision" is whatever the team wanted. Governance theatre with a gas bill.</td>
+      <td>Minimum-volume validity rule (a market below threshold is void, not decided); treasury LP capped and withdrawn before close; forecast-vs-actual scoring with weight decay; publish every market's volume and outcome.</td>
+      <td><span class="tag y">medium-high</span></td>
+    </tr>
+    <tr>
+      <td><b>Metric gaming</b></td>
+      <td>Net revenue maximised by pulling forward sales, cutting verification, or accepting a whale buyer.</td>
+      <td>Constraints are pre-market hard gates (dispute rate, SLA, concentration); trailing-90-day windows, not monthly snapshots; attestation requires an external signature; forecast scoring punishes one-off spikes.</td>
+      <td><span class="tag">medium</span></td>
+    </tr>
+    <tr>
+      <td><b>Regulatory</b></td>
+      <td>Escrow plus payouts looks like money transmission in some jurisdictions; sanctions exposure on pseudonymous counterparties; tax reporting for agent earnings.</td>
+      <td>Non-custodial escrow contracts where possible; licensed partner for fiat-in; KYB above $2,000/month per buyer; sanctions screening on payout addresses; geofencing; no custody of agent balances beyond the settlement epoch.</td>
+      <td><span class="tag y">medium</span></td>
+    </tr>
+    <tr>
+      <td><b>Liability for agent output</b></td>
+      <td>An agent produces something defamatory, infringing or wrong, and the buyer sues the marketplace.</td>
+      <td>Terms place responsibility on the poster's spec and the agent's execution; Foreguild warrants the <em>verification process</em>, not the content; insurance only above $5,000 tickets; refuse whole categories (legal advice, medical, financial advice) rather than pretend to verify them.</td>
+      <td><span class="tag">medium</span></td>
+    </tr>
+    <tr>
+      <td><b>We are the bottleneck</b></td>
+      <td>Founders end up doing routing, disputes and sales by hand; the FAO becomes a startup with a governance hobby.</td>
+      <td>Human-intervention rate KPI with a 2% ceiling; every manual action logged with a reason code and reviewed monthly; a manual action repeated three times becomes a ticket against the automation, not a habit.</td>
+      <td><span class="tag y">medium-high</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bad"><b>The one thing that would make us stop.</b> If, at day 90, funded GMV is growing but <b>contribution per task is below $1.50</b> and dispute rate is above 5%, the model is a subsidy machine and no amount of governance fixes it. We would return the remainder of the treasury to the reserve and publish the post-mortem. Committing to that in advance is cheaper than discovering it in month nine.</div>
+
+<!-- ============================================================ -->
+<h2 id="s10"><span class="n">10</span>90-day operating plan</h2>
+
+<p>Three phases, each with a number that decides whether the next phase happens, and a market that decides how.</p>
+
+<h3>Days 0–30 — Prove someone pays</h3>
+<table>
+  <thead><tr><th style="width:190px">Workstream</th><th>Output</th><th class="num">Target</th></tr></thead>
+  <tbody>
+    <tr><td>Demand</td><td>20 outbound conversations with DAOs and small SaaS; 5 signed pilot buyers</td><td class="num">$6,000 funded GMV</td></tr>
+    <tr><td>Supply</td><td>30 bonded agents, 10 with a manifest in a single strong skill</td><td class="num">≥65% fill rate</td></tr>
+    <tr><td>Assessment</td><td>T0 + T1 live; T2 sampled at 15% (high while calibrating)</td><td class="num">≥90% grader-human agreement</td></tr>
+    <tr><td>Rails</td><td>Escrow + gasless USDC payout on Base, batched</td><td class="num">&lt;$0.05 / payout</td></tr>
+    <tr><td>Governance</td><td>Publish objective, gates, limits. Open <b>one</b> capital market (channel choice).</td><td class="num">1 market, ≥$2k/branch</td></tr>
+  </tbody>
+</table>
+<p><b>Gate G1 (day 30):</b> ≥$6,000 funded GMV <em>and</em> ≥3 buyers who paid twice. If funded GMV &lt; $3,000, the demand thesis is wrong at this ticket size — pivot to channel B (agent-to-agent) where acquisition cost is zero, and re-run G1 at day 60.</p>
+
+<h3>Days 31–60 — Prove it can be automated</h3>
+<table>
+  <thead><tr><th style="width:190px">Workstream</th><th>Output</th><th class="num">Target</th></tr></thead>
+  <tbody>
+    <tr><td>Routing</td><td>Scored auction + Wilson reputation + cluster detection live</td><td class="num">manual routing &lt;10% of tasks</td></tr>
+    <tr><td>Assessment</td><td>T2 sampling down to 8%; calibration set of 200 labelled artifacts</td><td class="num">assessment ≤12% of revenue</td></tr>
+    <tr><td>Disputes</td><td>D0–D2 live, reserve funded</td><td class="num">dispute rate ≤4%</td></tr>
+    <tr><td>Volume</td><td>Channel B integration with 3 agent frameworks</td><td class="num">$28,000 GMV / month</td></tr>
+    <tr><td>Governance</td><td>First <b>parameter</b> market (take rate); thermostat opens</td><td class="num">2 markets resolved</td></tr>
+  </tbody>
+</table>
+<p><b>Gate G2 (day 60):</b> contribution per task ≥$3.00 <em>and</em> dispute rate ≤5% <em>and</em> manual routing &lt;20%. Miss on contribution → raise prices or cut sampling, decided by parameter market. Miss on disputes → sampling back to 15% and pause new channels.</p>
+
+<h3>Days 61–90 — Prove the governance works</h3>
+<table>
+  <thead><tr><th style="width:190px">Workstream</th><th>Output</th><th class="num">Target</th></tr></thead>
+  <tbody>
+    <tr><td>Governance</td><td>3 parameter + 2 capital markets; every result executed by automation within 24h</td><td class="num">100% mandate execution</td></tr>
+    <tr><td>Revenue mix</td><td>Verification-as-a-service pilot with 1 external marketplace</td><td class="num">≥5% of revenue</td></tr>
+    <tr><td>Trust</td><td>Public performance index v1; monthly reconciliation published twice</td><td class="num">0 attestation gaps</td></tr>
+    <tr><td>Volume</td><td>Repeat buyers ≥40% of GMV</td><td class="num">$45,000 GMV / month</td></tr>
+  </tbody>
+</table>
+<p><b>Gate G3 (day 90):</b> the decision that matters is not "are we growing" but "does the market beat the team". We compare, for every resolved market, the market's forecast against what the team would have decided unilaterally. If market-conditional forecasts beat unilateral forecasts on ≥60% of decisions, futarchy is earning its complexity and we expand it to structural decisions. If not, we narrow it to the thermostat and the parameter markets only, and say so publicly.</p>
+
+<div class="note"><b>Decision points are markets, not meetings.</b> Every gate above is a published number with a published consequence. Nothing in this roadmap requires a founder to be optimistic on a specific Tuesday.</div>
+
+<!-- ============================================================ -->
+<h2 id="s11"><span class="n">11</span>Why this team</h2>
+
+<p>We are not proposing a mechanism we have only read about. The operator-and-agent pair behind this submission has been running a production autonomous earning loop since October 2026, on public agent marketplaces, with real money settling on-chain. That loop is a small-scale version of exactly the machinery Foreguild needs, and most of this plan's opinions come from its failures rather than its successes.</p>
+
+<h3>What the loop actually does</h3>
+<table>
+  <thead><tr><th style="width:180px">Function</th><th>What exists today</th><th>What it taught us</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Demand discovery</b></td>
+      <td>Read-only radars poll open bounty boards, on-chain payout events and paid-task feeds on a schedule; hits are triaged into actionable vs. report-only.</td>
+      <td>Most "opportunities" are noise or already dead. The binding constraint is qualification, not discovery — which is why §3 counts funded GMV rather than posted GMV.</td>
+    </tr>
+    <tr>
+      <td><b>Task screening</b></td>
+      <td>Every candidate task is scored against payout, deadline, autonomy (can an agent do it without a human?) and a honeypot checklist before any work starts.</td>
+      <td>Honeypots are common and usually obvious to a human in five seconds and invisible to a naive agent. Screening has to be a gate, not a vibe.</td>
+    </tr>
+    <tr>
+      <td><b>Execution</b></td>
+      <td>Work is produced, packaged and submitted through the platform's official CLI, with a receipt captured for every submission; failures are classified rather than retried blindly.</td>
+      <td>Submission infrastructure fails more often than the work does. A receipt is worth more than a log line.</td>
+    </tr>
+    <tr>
+      <td><b>Verdicts</b></td>
+      <td>Outcomes (accepted / rejected / paid) are polled and reconciled against submissions, with rate limits respected per task.</td>
+      <td>Payment is a separate event from acceptance, and often lags by days. Any accounting that assumes "accepted = paid" is wrong.</td>
+    </tr>
+    <tr>
+      <td><b>Payouts</b></td>
+      <td>USDC settles gaslessly on Base; payouts are batched and every send passes a pre-signature guard with a recipient allowlist, per-transaction and per-day limits.</td>
+      <td>This is the single most reusable piece of the whole system. §5.3 and §7.2 are essentially that guard, promoted to a business rule.</td>
+    </tr>
+    <tr>
+      <td><b>Instrumentation</b></td>
+      <td>An append-only event journal records scans, discovered tasks, screening decisions, submissions, verdicts and payments — with explicit "unknown" states so that absence of a record is never silently read as zero.</td>
+      <td>Without an explicit unknown, every dashboard eventually lies. §6.5's void-market rule comes directly from this.</td>
+    </tr>
+    <tr>
+      <td><b>Failure handling</b></td>
+      <td>Retries are decided by whether an artifact exists, not by a counter; budget exhaustion produces a blocked state rather than an infinite loop.</td>
+      <td>Optimistic retry loops are how autonomous systems burn money quietly. Same principle as the escalation rule in §8.1.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>What we are not claiming</h3>
+<ul>
+  <li>We have not run a marketplace at scale. This plan is an operating thesis backed by a working small loop, not a track record of GMV.</li>
+  <li>We have not deployed futarchy in production. We have read the mechanism, watched it fail in low-liquidity settings, and designed around the failure modes we could identify (§9).</li>
+  <li>The numbers in §1 are modelled, not audited. They are built bottom-up from per-task costs we can measure today, and they are published here so they can be checked against our first three monthly reconciliations.</li>
+</ul>
+
+<p>What we do have is the least glamorous and most useful thing: <b>we have operated an autonomous agent that gets paid by strangers, and we know exactly where that process breaks.</b> Foreguild is that process, with a take rate, a reputation graph, and a market where the founder used to be.</p>
+
+<!-- ============================================================ -->
+<h2 id="s12"><span class="n">12</span>Appendix</h2>
+
+<h3>Definitions</h3>
+<table>
+  <thead><tr><th style="width:170px">Term</th><th>Meaning here</th></tr></thead>
+  <tbody>
+    <tr><td><b>FAO</b></td><td>Futarchy Autonomous Organization — a swarm of agents doing work, whose actions are directed by futarchy. We use the "Organization" reading from the brief; the same acronym appears in the literature as "Futarchy Autonomous Optimizer", which emphasises the treasury-optimising reading. The mechanics below are compatible with both; we optimise a stated objective rather than a token price.</td></tr>
+    <tr><td><b>Conditional market</b></td><td>A market whose payoff depends on a branch (e.g. proposal passes / fails). Comparing the two branches' forecasts is the decision procedure.</td></tr>
+    <tr><td><b>Attested revenue</b></td><td>Revenue computed from on-chain events plus an invoice Merkle root plus an external signature; two of three required.</td></tr>
+    <tr><td><b>Fill rate</b></td><td>Fillable GMV ÷ funded GMV.</td></tr>
+    <tr><td><b>Contribution per task</b></td><td>Revenue per task minus assessment, rail and channel cost. Excludes fixed costs.</td></tr>
+  </tbody>
+</table>
+
+<h3>Open questions we have not solved</h3>
+<ol>
+  <li><b>Cold-start liquidity for governance.</b> A market with $2,000 on each side and no informed traders is a coin flip with fees. Our answer — agent bonds and buyer participation — is plausible but unproven.</li>
+  <li><b>Resolution latency vs. decision speed.</b> Revenue resolves 60–90 days after the decision. A market that is right but slow still lets a bad decision run for a quarter. The thermostat is our partial fix; a proper fix would need leading indicators we trust.</li>
+  <li><b>Agent liability.</b> If an agent is an autonomous contract with a bond, who is the counterparty in a legal dispute? We assume the operator behind the bond, which works until it doesn't.</li>
+  <li><b>Whether buyers want governance at all.</b> Buyers want their task done. Futarchy may be a supply-side and treasury-side tool that buyers never touch — which is fine, but it means governance participation has to be paid for out of margin, not out of goodwill.</li>
+  <li><b>Metric choice at scale.</b> Net revenue is checkable and gameable. Gross margin is less gameable and harder to attest. We expect to move toward a two-metric objective once attestation matures, and we do not yet know the right weighting.</li>
+</ol>
+
+<h3>Prior art we are building on</h3>
+<ul>
+  <li>Robin Hanson, <em>Futarchy: Vote Values, But Bet Beliefs</em> (2000) — the original decision-market proposal.</li>
+  <li>Seer — conditional token markets on Gnosis, Reality.eth questions, Kleros arbitration, and futarchy markets resolving on a token's predicted price. Foreguild intends to use this market infrastructure rather than rebuild it.</li>
+  <li>Kleros Foresight — futarchy sessions run on Seer with Kleros Court as the dispute backstop, including work on AI-first adjudication with human escalation only when value at stake justifies it; §8.1's cost ladder is a direct application.</li>
+  <li>Gnosis Conditional Tokens Framework — the primitive underneath all of the above.</li>
+</ul>
+
+<footer>
+  <p><b>Foreguild — Operating Plan.</b> Submitted to the Seer FAO Operating Plan Contest via POIDH bounty #1531, 8 November 2026. Deadline 12 November 2026, 23:59 AoE.</p>
+  <p>Canonical copy: <a href="{{PLAN_URL}}">{{PLAN_URL}}</a> · Contact via POIDH submission thread.</p>
+  <p class="small">All figures are operating targets and modelled unit economics, not audited results. Market mechanics reference Seer's public documentation; no claim is made that any specific integration is already live.</p>
+</footer>
+
+</div>
+</body>
+</html>
